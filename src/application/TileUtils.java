@@ -9,7 +9,7 @@ import static application.GamePanel.*;
 public class TileUtils {
 
     public static Tile getTileAt(int x, int y, List<Tile> tiles) {
-        if (LEFTINDENT <= x && TOPINDENT <= y && y <= TOPINDENT + (int) (TILESIZE * 1.3)) {
+        if (LEFTINDENT <= x && TOPINDENT - 20 <= y && y <= TOPINDENT + (int) (TILESIZE * 1.3) + 40) {
             System.out.println("Region");
             for (Tile tile : tiles) {
                 if (tile.x <= x && x <= tile.x + tile.width) {
