@@ -1,14 +1,12 @@
-package model;
+package model.Tiles;
 
-import application.GamePanel;
+import model.Entity;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
-import javax.imageio.ImageIO;
-
-import static application.GamePanel.*;
 
 public class Tile extends Entity {
     private int index;
@@ -46,13 +44,6 @@ public class Tile extends Entity {
 
     public void setIndex(int index) {
         this.index = index;
-    }
-
-    public void setPosition(int index, int padding) {
-        this.x = LEFTINDENT + padding + TILESIZE * index;
-        this.y = TOPINDENT;
-        this.width = TILESIZE;
-        this.height = (int) (TILESIZE * 1.3);
     }
 
     @Override

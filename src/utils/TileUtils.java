@@ -1,16 +1,16 @@
-package application;
+package utils;
 
-import model.Tile;
+import config.Config;;
+import model.Tiles.Tile;
 
 import java.util.List;
-
-import static application.GamePanel.*;
 
 public class TileUtils {
 
     public static Tile getTileAt(int x, int y, List<Tile> tiles) {
-        if (LEFTINDENT <= x && TOPINDENT - 20 <= y && y <= TOPINDENT + (int) (TILESIZE * 1.3) + 40) {
-            System.out.println("Region");
+        if (Config.PLAYER_HAND_LEFT_INDENT <= x
+                && Config.PLAYER_HAND_TOP_INDENT - 20 <= y
+                && y <= Config.PLAYER_HAND_TOP_INDENT + Config.TILE_HEIGHT) {
             for (Tile tile : tiles) {
                 if (tile.x <= x && x <= tile.x + tile.width) {
                     return tile;

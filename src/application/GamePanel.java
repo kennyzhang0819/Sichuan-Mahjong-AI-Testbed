@@ -1,7 +1,9 @@
 package application;
 
+import model.Tiles.Tile;
+import config.Config;
 import model.Player;
-import model.Tile;
+import model.Tiles.Tiles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,19 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
-import static application.TileUtils.*;
+import static utils.TileUtils.*;
 
 public class GamePanel extends JPanel implements Runnable {
-
-    public static final int originalTileSize = 16;
-    public static final int TILESIZE = originalTileSize * 4;
-    public static final int LEFTINDENT = 200;
-    public static final int TOPINDENT = 650;
-    final int maxScreenColumns = 25;
-    final int maxScreenRows = 15;
-    final int screenWidth = TILESIZE * maxScreenColumns;
-    final int screenHeight = TILESIZE * maxScreenRows;
-
 
     Thread gameThread;
     private final List<Tile> tilesToDraw;
@@ -30,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Player player;
 
     public GamePanel() {
-        setPreferredSize(new Dimension(screenWidth, screenHeight));
+        setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
@@ -38,7 +30,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.player = game.getPlayers().get(0);
         game.shuffleTiles();
         game.deal();
-        tilesToDraw = player.getHand();
+        Tiles playerHand = player.getHand();
+        List<Tile> playerHandList = playerHand.toList();
+        tilesToDraw = playerHandList;
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -55,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void mouseMoved(MouseEvent e) {
                 // Check if the mouse is over a tile
-                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), tilesToDraw);
+                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), playerHandList);
 
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
@@ -72,19 +66,21 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
 
-
-    public void startGameThread() {
-        gameThread = new Thread(this);
-        gameThread.start();
-    }
-
     @Override
     public void run() {
+        double interval = 1000000000.0 / Config.FPS;
+        double nextTime = System.nanoTime() + interval;
+
         while (gameThread != null) {
             update();
             repaint();
             try {
-                Thread.sleep(100000);
+                double wait = (nextTime - System.nanoTime()) / 1000000;
+                if (wait < 0) {
+                    wait = 0;
+                }
+                Thread.sleep((long) wait);
+                nextTime += interval;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

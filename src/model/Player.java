@@ -1,61 +1,58 @@
 package model;
 
+import model.Tiles.Tile;
+import model.Tiles.Tiles;
+
 import java.util.List;
+import java.util.Objects;
 
 public class Player {
     private String name;
-    private List<Tile> hand;
+    private Tiles hand;
 
     public Player(String name, List<Tile> hand) {
         this.name = name;
-        this.hand = hand;
-        this.sortHands();
+        this.hand = new Tiles(hand);
     }
 
-    public void sortHands() {
-        List<Tile> tiles = this.hand;
-        tiles.sort((tile1, tile2) -> {
-            if (tile1.getCategory().equals(tile2.getCategory())) {
-                return tile1.getNumber() - tile2.getNumber();
-            } else {
-                return tile1.getCategory().compareTo(tile2.getCategory());
-            }
-        });
-        this.setHand(tiles);
+    public String getName() {
+        return name;
     }
 
-    public List<Tile> getHand() {
+    public Tiles getHand() {
         return hand;
     }
 
-    private void setHand(List<Tile> hand) {
-        for (int i = 0; i < hand.size(); i++) {
-            Tile tile = hand.get(i);
-            tile.setIndex(i);
-
-            int padding = 10 * i;
-            tile.setPosition(i, padding);
-        }
-        this.hand = hand;
+    public void setHand(Tiles tiles) {
+        this.hand = tiles;
     }
+
 
     public void addTile(Tile tile) {
         this.hand.add(tile);
-        this.sortHands();
     }
 
-    private void removeTile(Tile tile) {
-        for (Tile t : this.hand) {
-            if (t.equals(tile)) {
-                this.hand.remove(t);
-                break;
-            }
-        }
-        this.sortHands();
-    }
 
     public void plays(Tile tile) {
-        this.removeTile(tile);
-        this.sortHands();
+        this.hand.remove(tile);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '}';
     }
 }
