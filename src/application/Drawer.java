@@ -1,7 +1,6 @@
 package application;
 
-import model.log.Log;
-import model.players.Entity;
+import model.Entity;
 import model.tiles.Tile;
 
 import java.awt.*;

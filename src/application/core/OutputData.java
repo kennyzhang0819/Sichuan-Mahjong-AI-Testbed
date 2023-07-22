@@ -2,14 +2,12 @@ package application.core;
 
 import model.players.Player;
 import model.tiles.Tile;
-import utils.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class RoundData {
+public class OutputData {
     private final Player turnPlayer;
     private final int round;
 
@@ -20,7 +18,7 @@ public class RoundData {
     private final List<Tile> ai3Table;
     private final List<Tile> tilesToDraw;
 
-    public RoundData(Player turnPlayer, int round, List<Tile> playerHand, List<Tile> playerTable, List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
+    public OutputData(Player turnPlayer, int round, List<Tile> playerHand, List<Tile> playerTable, List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
         this.turnPlayer = turnPlayer;
         this.round = round;
         this.playerHand = playerHand;
@@ -65,7 +63,7 @@ public class RoundData {
 
     @Override
     public String toString() {
-        return "RoundData{" +
+        return "OutputData{" +
                 "turnPlayer=" + turnPlayer +
                 ", round=" + round +
                 ", playerHand=" + playerHand +

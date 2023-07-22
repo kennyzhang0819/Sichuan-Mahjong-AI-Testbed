@@ -1,10 +1,10 @@
 package application.core;
 
 import model.log.Log;
-import model.players.ai.AI1;
+import model.players.AI1;
 import model.players.Player;
-import model.players.ai.AI2;
-import model.players.ai.AI3;
+import model.players.AI2;
+import model.players.AI3;
 import model.tiles.Tile;
 import model.tiles.HandTiles;
 
@@ -12,6 +12,7 @@ import java.util.*;
 
 public class Game {
     private final List<Tile> tiles;
+    private final List<Tile> allTiles;
     private final List<Player> players;
     private GameTurn gameTurn;
     private Log log;
@@ -34,6 +35,7 @@ public class Game {
                 }
             }
         }
+        this.allTiles = new ArrayList<>(this.tiles);
         log.addMessage("Tiles created");
         Collections.shuffle(tiles);
         log.addMessage("Tiles shuffled");
@@ -61,19 +63,19 @@ public class Game {
         this.gameTurn = new GameTurn(players, player);
     }
 
-    public RoundData next() {
+    public OutputData next() {
         Player turnPlayer = this.players.get(this.gameTurn.next());
         log.addMessage(turnPlayer.getName() + "'s turn");
         if (gameTurn.getRound() != 1) {
             turnPlayer.addTile(this.getNextTile());
         }
         turnPlayer.action();
-        RoundData data = this.getRoundData(turnPlayer);
+        OutputData data = this.getRoundData(turnPlayer);
         log.addMessage(turnPlayer.getName() + " played, with " + data.getPlayerHand().size() + " tiles on hand");
         return data;
     }
 
-    private RoundData getRoundData(Player turnPlayer) {
+    private OutputData getRoundData(Player turnPlayer) {
         Map<String, List<Tile>> output = new HashMap<>();
         for (Player player : this.players) {
             output.put(player.getName() + "Hand", player.getHand().toList());
@@ -84,7 +86,7 @@ public class Game {
         List<Tile> ai1Table = output.get("AI1Table");
         List<Tile> ai2Table = output.get("AI2Table");
         List<Tile> ai3Table = output.get("AI3Table");
-        return new RoundData(turnPlayer, gameTurn.getRound(), playerHand, playerTable, ai1Table, ai2Table, ai3Table);
+        return new OutputData(turnPlayer, gameTurn.getRound(), playerHand, playerTable, ai1Table, ai2Table, ai3Table);
     }
 
 

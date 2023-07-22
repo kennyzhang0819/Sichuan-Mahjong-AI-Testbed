@@ -1,9 +1,9 @@
 package application;
 
 import application.core.Game;
-import application.core.RoundData;
+import application.core.OutputData;
 import config.Config;
-import model.players.Entity;
+import model.Entity;
 import model.players.Player;
 import model.tiles.Tile;
 
@@ -19,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Thread gameThread;
     private Game game;
-    private RoundData roundData;
+    private OutputData outputData;
     private Player player;
 
     private Tile hoveredTile = null;
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.game = new Game();
         this.player = this.game.getPlayers().get(0);
-        this.roundData = this.game.next();
+        this.outputData = this.game.next();
         this.initBoxes();
         addMouseListener(new MouseAdapter() {
             @Override
@@ -48,7 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
                     player.plays(hoveredTile);
                     hoveredTile = null;
                     for (int i = 0; i < 4; i++) {
-                        roundData = game.next();
+                        outputData = game.next();
                     }
                     this.mouseMoved(e);
                 }
@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), roundData.getPlayerHand());
+                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), outputData.getPlayerHand());
 
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
@@ -126,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
         drawer.drawRect(ai1Table);
         drawer.drawRect(ai2Table);
         drawer.drawRect(ai3Table);
-        for (Tile tile : roundData.getTilesToDraw()) {
+        for (Tile tile : outputData.getTilesToDraw()) {
             drawer.drawTile(tile);
         }
         g2.dispose();

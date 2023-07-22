@@ -42,10 +42,9 @@ public class TileUtils {
             public void run() {
                 if (stepsCompleted < STEPS) {
                     tile.y -= 15.0 / STEPS;
-                    // Adjust the Y-coordinate in small steps
                     stepsCompleted++;
                 } else {
-                    executor.shutdown(); // Stop the scheduled task once the movement is complete
+                    executor.shutdown();
                 }
             }
         }, 0, DELAY, TimeUnit.MILLISECONDS);
