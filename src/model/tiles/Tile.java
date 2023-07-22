@@ -15,6 +15,7 @@ public class Tile extends Entity {
     private BufferedImage image;
 
     public Tile(String category, int number) {
+        super(0,0,0,0);
         this.category = category;
         this.number = number;
         try {

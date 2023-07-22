@@ -1,6 +1,7 @@
 package application;
 
 import model.log.Log;
+import model.players.Entity;
 import model.tiles.Tile;
 
 import java.awt.*;
@@ -23,9 +24,9 @@ public class Drawer {
         Image scaled = image.getScaledInstance(tile.width, tile.height, Image.SCALE_SMOOTH);
 
         g2.setColor(Color.WHITE);
-        g2.fillRect(tile.x, tile.y, tile.width, tile.height);
-        g2.drawString(String.valueOf(tile.getIndex() + 1), tile.x, tile.y + tile.height + 20);
-        g2.drawImage(scaled, tile.x, tile.y, null);
+        g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
+        g2.drawString(String.valueOf(tile.getIndex() + 1),(int) tile.x,(int) tile.y + tile.height + 20);
+        g2.drawImage(scaled,(int) tile.x,(int) tile.y, null);
     }
 
     public void drawBackground() {
@@ -48,19 +49,29 @@ public class Drawer {
     }
 
     public void drawLogs(List<String> logs) {
+        g2.setFont(new Font("Arial", Font.PLAIN, 15)); // Choose the font and its size
         g2.setColor(Color.WHITE); // Choose a color for the text
         int lineHeight = g2.getFontMetrics().getHeight(); // The height of a line of text
-        int padding = 20; // Padding around the log window
-        int logWindowHeight = logs.size() * lineHeight + padding * 2; // Height of the log window
-        int logWindowY = this.height - logWindowHeight; // Y coordinate of the log window
+        int padding = 100; // Padding around the log window
+        int logWindowWidth = 400; // Width of the log window
+        int logWindowX = this.width - logWindowWidth; // X coordinate of the log window
+        int textPadding = 20;
+        g2.setColor(Color.BLACK); // Set the background color of the log window
+        g2.fillRect(logWindowX, padding, logWindowWidth, this.height - padding * 2);
+        g2.setColor(Color.WHITE); // Change color for the text
 
-        g2.fillRect(padding, logWindowY, this.width - padding * 2, logWindowHeight); // Draw the log window
-        g2.setColor(Color.BLACK); // Change color for the text
+
 
         // Draw each log line
         for (int i = 0; i < logs.size(); i++) {
             String log = logs.get(i);
-            g2.drawString(log, padding, logWindowY + padding + i * lineHeight);
+            g2.drawString(log, logWindowX + textPadding, padding + textPadding + i * lineHeight);
         }
     }
+
+    public void drawRect(Entity entity) {
+        g2.setColor(Color.WHITE);
+        g2.drawRect((int) entity.x, (int) entity.y, entity.width, entity.height);
+    }
+
 }

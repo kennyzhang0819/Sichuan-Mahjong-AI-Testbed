@@ -5,8 +5,8 @@ import model.tiles.Tile;
 
 import java.util.List;
 
-public class DummyAi extends Player {
-    public DummyAi(String name, List<Tile> hand) {
+public class DummyAI extends Player {
+    public DummyAI(String name, List<Tile> hand) {
         super(name, hand);
     }
 

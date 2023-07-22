@@ -17,11 +17,11 @@ public class Log {
 
         @Override
         public String toString() {
-            return time + ": " + message;
+            return message;
         }
     }
 
-    private LinkedList<LogEntry> logEntries;
+    private List<LogEntry> logEntries;
 
     public Log() {
         logEntries = new LinkedList<>();
@@ -29,13 +29,12 @@ public class Log {
     }
 
     public void addMessage(String message) {
-        logEntries.addLast(new LogEntry(message));
+        logEntries.add(new LogEntry(message));
     }
 
     public List<String> getLastXMessages(int x) {
         return logEntries.stream()
-                .sorted((entry1, entry2) -> -entry1.time.compareTo(entry2.time))
-                .limit(x)
+                .skip(Math.max(0, logEntries.size() - x))
                 .map(LogEntry::toString)
                 .collect(Collectors.toList());
     }

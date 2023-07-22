@@ -1,7 +1,7 @@
 package application;
 
 import model.log.Log;
-import model.players.ai.DummyAi;
+import model.players.ai.DummyAI;
 import application.core.GameTurn;
 import application.core.RoundData;
 import model.players.Player;
@@ -21,9 +21,9 @@ public class Game {
         this.tiles = new ArrayList<>();
         players = new ArrayList<Player>() {{
             add(new Player("Player", new ArrayList<>()));
-            add(new DummyAi("AI 1", new ArrayList<>()));
-            add(new DummyAi("AI 2", new ArrayList<>()));
-            add(new DummyAi("AI 3", new ArrayList<>()));
+            add(new DummyAI("AI 1", new ArrayList<>()));
+            add(new DummyAI("AI 2", new ArrayList<>()));
+            add(new DummyAI("AI 3", new ArrayList<>()));
         }};
         log.addMessage("Players created");
         String[] categories = {"Bamboo", "Character", "Dot"};
@@ -88,6 +88,7 @@ public class Game {
     // getters
     public Tile getNextTile() {
         if (tiles.size() == 0) {
+            log.addMessage("No more tiles");
             System.out.println("No more tiles");
             return null;
         }

@@ -1,8 +1,8 @@
 package application;
 
-import application.core.GameTurn;
 import application.core.RoundData;
 import config.Config;
+import model.players.Entity;
 import model.players.Player;
 import model.tiles.Tile;
 
@@ -16,11 +16,17 @@ import static utils.TileUtils.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    private Thread gameThread;
+    Thread gameThread;
     private Game game;
     private RoundData roundData;
     private Player player;
+
     private Tile hoveredTile = null;
+
+
+
+    private Entity playerHand;
+    private Entity playerTable;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
@@ -30,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.game = new Game();
         this.player = this.game.getPlayers().get(0);
         this.roundData = this.game.next();
-
+        this.initBoxes();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -38,12 +44,12 @@ public class GamePanel extends JPanel implements Runnable {
                 if (hoveredTile != null) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
-                    repaint();
                     for (int i = 0; i < 4; i++) {
                         roundData = game.next();
-                        System.out.println(roundData.getTurnPlayer().getName());
                     }
+                    this.mouseMoved(e);
                 }
+
             }
         });
 
@@ -60,10 +66,21 @@ public class GamePanel extends JPanel implements Runnable {
                         moveTileUp(newHoveredTile);
                     }
                     hoveredTile = newHoveredTile;
-                    repaint();
                 }
             }
         });
+    }
+
+    public void initBoxes() {
+        this.playerHand = new Entity(Config.PLAYER_HAND_X, Config.PLAYER_HAND_Y, Config.PLAYER_HAND_WIDTH, Config.PLAYER_HAND_HEIGHT);
+        this.playerTable = new Entity(Config.PLAYER_TABLE_X, Config.PLAYER_TABLE_Y, Config.PLAYER_TABLE_WIDTH, Config.PLAYER_TABLE_HEIGHT);
+    }
+
+    public void start() {
+        if (gameThread == null) {
+            gameThread = new Thread(this);
+            gameThread.start();
+        }
     }
 
     @Override
@@ -97,7 +114,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         Drawer drawer = new Drawer(g2, getWidth(), getHeight());
         drawer.drawBackground();
-        drawer.drawLogs(this.game.getLog().getLastXMessages(10));
+
+        drawer.drawLogs(this.game.getLog().getLastXMessages(40));
+        drawer.drawRect(playerHand);
+        drawer.drawRect(playerTable);
         for (Tile tile : roundData.getTilesToDraw()) {
             drawer.drawTile(tile);
         }
