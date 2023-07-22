@@ -1,6 +1,6 @@
 package model.players;
 
-import model.tiles.PlayerHandTiles;
+import model.tiles.HandTiles;
 import model.tiles.PlayerTableTiles;
 import model.tiles.Tile;
 import model.tiles.Tiles;
@@ -9,14 +9,14 @@ import utils.TileUtils;
 import java.util.List;
 import java.util.Objects;
 
-public class Player {
-    private final String name;
-    private PlayerHandTiles hand;
+public class Player{
+    protected final String name;
+    protected HandTiles hand;
     private final PlayerTableTiles table;
 
     public Player(String name, List<Tile> hand) {
         this.name = name;
-        this.hand = new PlayerHandTiles(hand);
+        this.hand = new HandTiles(hand);
         this.table = new PlayerTableTiles();
     }
 
@@ -32,7 +32,7 @@ public class Player {
         return table;
     }
 
-    public void setHand(PlayerHandTiles tiles) {
+    public void setHand(HandTiles tiles) {
         this.hand = tiles;
     }
 

@@ -31,17 +31,17 @@ public class Config {
     public static final int FOURTEENTH_TILE_INDENT = 80;
     public static final int PLAYER_HAND_TILE_PADDING = 10;
 
+    //Table Commons
+    private static final double SHRINK_MULTIPLIER = 0.65;
+    public static final double TABLE_TILE_PADDING = PLAYER_HAND_TILE_PADDING * SHRINK_MULTIPLIER;
+    public static final double TABLE_TILE_WIDTH = TILE_WIDTH * SHRINK_MULTIPLIER;
+    public static final double TABLE_TILE_HEIGHT = TILE_HEIGHT * SHRINK_MULTIPLIER;
+
     //PlayerTable
     public static final int PLAYER_TABLE_X = 200;
     public static final int PLAYER_TABLE_Y = 500;
     public static final int PLAYER_TABLE_WIDTH = SCREEN_WIDTH - 700;
     public static final int PLAYER_TABLE_HEIGHT = 100;
-    public static final double SHRINK_MULTIPLIER = 0.65;
-    public static final double PLAYER_TABLE_TILE_PADDING = PLAYER_HAND_TILE_PADDING * SHRINK_MULTIPLIER;
-    public static final double TABLE_TILE_WIDTH = TILE_WIDTH * SHRINK_MULTIPLIER;
-    public static final double TABLE_TILE_HEIGHT = TILE_HEIGHT * SHRINK_MULTIPLIER;
-
-
 
     //AITable
     public static final int AI_TABLE_PADDING = 50;

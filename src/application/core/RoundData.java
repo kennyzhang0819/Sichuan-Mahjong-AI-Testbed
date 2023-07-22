@@ -2,7 +2,9 @@ package application.core;
 
 import model.players.Player;
 import model.tiles.Tile;
+import utils.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,11 +28,7 @@ public class RoundData {
         this.ai1Table = ai1Table;
         this.ai2Table = ai2Table;
         this.ai3Table = ai3Table;
-        this.tilesToDraw = Stream.concat(
-                        playerHand.stream(),
-                        playerTable.stream())
-                .collect(Collectors.toList());
-
+        this.tilesToDraw = Stream.of(playerHand, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
     }
 
     public Player getTurnPlayer() {

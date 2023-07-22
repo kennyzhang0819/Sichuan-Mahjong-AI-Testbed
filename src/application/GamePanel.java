@@ -41,7 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.player = this.game.getPlayers().get(0);
         this.roundData = this.game.next();
         this.initBoxes();
-        System.out.println(this.roundData);
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

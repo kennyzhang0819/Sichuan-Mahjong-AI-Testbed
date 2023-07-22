@@ -4,8 +4,8 @@ import config.Config;
 
 import java.util.List;
 
-public class PlayerHandTiles extends Tiles{
-    public PlayerHandTiles(List<Tile> tiles) {
+public class HandTiles extends Tiles{
+    public HandTiles(List<Tile> tiles) {
         super(tiles);
     }
 

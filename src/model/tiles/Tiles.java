@@ -3,7 +3,7 @@ package model.tiles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tiles implements TilesPositioned{
+public class Tiles{
 
     protected final List<Tile> tiles;
 
