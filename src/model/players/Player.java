@@ -1,18 +1,23 @@
-package model;
+package model.players;
 
-import model.Tiles.Tile;
-import model.Tiles.Tiles;
+import model.tiles.PlayerHandTiles;
+import model.tiles.PlayerTableTiles;
+import model.tiles.Tile;
+import model.tiles.Tiles;
+import utils.TileUtils;
 
 import java.util.List;
 import java.util.Objects;
 
 public class Player {
-    private String name;
-    private Tiles hand;
+    private final String name;
+    private PlayerHandTiles hand;
+    private final PlayerTableTiles table;
 
     public Player(String name, List<Tile> hand) {
         this.name = name;
-        this.hand = new Tiles(hand);
+        this.hand = new PlayerHandTiles(hand);
+        this.table = new PlayerTableTiles();
     }
 
     public String getName() {
@@ -23,18 +28,26 @@ public class Player {
         return hand;
     }
 
-    public void setHand(Tiles tiles) {
-        this.hand = tiles;
+    public Tiles getTable() {
+        return table;
     }
 
+    public void setHand(PlayerHandTiles tiles) {
+        this.hand = tiles;
+    }
 
     public void addTile(Tile tile) {
         this.hand.add(tile);
     }
 
-
     public void plays(Tile tile) {
         this.hand.remove(tile);
+        TileUtils.resetEntity(tile);
+        this.table.add(tile);
+    }
+
+    public void action() {
+
     }
 
     @Override

@@ -1,16 +1,18 @@
-package application;
+package application.core;
 
-import model.Player;
+import model.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameTurn {
-    private int count;
+    private int round;
     private final List<Player> turns;
+    private final List<Player> original;
 
     public GameTurn(List<Player> players, Player startingPlayer) {
-        this.count = 0;
+        this.round = 0;
+        this.original = players;
         int startingIndex = players.indexOf(startingPlayer);
         this.turns = new ArrayList<>();
         this.turns.add(startingPlayer);
@@ -21,14 +23,19 @@ public class GameTurn {
         }
     }
 
-    public Player getNext() {
+    public int next() {
         Player player = this.turns.remove(0);
         this.turns.add(player);
-        this.count++;
-        return player;
+        this.round++;
+        return this.original.indexOf(player);
     }
 
-    public int getCount() {
-        return count;
+    public Player peek() {
+        return this.turns.get(0);
+    }
+
+
+    public int getRound() {
+        return round;
     }
 }

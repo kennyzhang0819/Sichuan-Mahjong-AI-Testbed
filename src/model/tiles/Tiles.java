@@ -1,10 +1,16 @@
-package model.Tiles;
+package model.tiles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tiles implements TilesPositioned{
 
     protected final List<Tile> tiles;
+
+    public Tiles() {
+        this.tiles = new ArrayList<>();
+        this.sort();
+    }
 
     public Tiles(List<Tile> tiles) {
         this.tiles = tiles;
@@ -39,7 +45,7 @@ public class Tiles implements TilesPositioned{
         this.updatePosition();
     }
 
-    private void updateIndex() {
+    protected void updateIndex() {
         for (int i = 0; i < this.tiles.size(); i++) {
             this.tiles.get(i).setIndex(i);
         }
@@ -50,6 +56,9 @@ public class Tiles implements TilesPositioned{
     }
 
     public List<Tile> toList() {
+        if (tiles == null) {
+            return new ArrayList<>();
+        }
         return tiles;
     }
 

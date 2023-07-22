@@ -1,46 +1,48 @@
 package application;
 
-import model.Tiles.Tile;
+import application.core.GameTurn;
+import application.core.RoundData;
 import config.Config;
-import model.Player;
-import model.Tiles.Tiles;
+import model.players.Player;
+import model.tiles.Tile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.List;
 
 import static utils.TileUtils.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    Thread gameThread;
-    private final List<Tile> tilesToDraw;
-    private Tile hoveredTile = null;
+    private Thread gameThread;
+    private Game game;
+    private RoundData roundData;
     private Player player;
+    private Tile hoveredTile = null;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
-        Game game = new Game();
-        this.player = game.getPlayers().get(0);
-        game.shuffleTiles();
-        game.deal();
-        Tiles playerHand = player.getHand();
-        List<Tile> playerHandList = playerHand.toList();
-        tilesToDraw = playerHandList;
+        this.game = new Game();
+        this.player = this.game.getPlayers().get(0);
+        this.roundData = this.game.next();
+
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (hoveredTile != null) {
                     player.plays(hoveredTile);
-                    game.update(hoveredTile);
+                    hoveredTile = null;
                     repaint();
+                    for (int i = 0; i < 4; i++) {
+                        roundData = game.next();
+                        System.out.println(roundData.getTurnPlayer().getName());
+                    }
                 }
             }
         });
@@ -48,8 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                // Check if the mouse is over a tile
-                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), playerHandList);
+                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), roundData.getPlayerHand());
 
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
@@ -64,7 +65,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
         });
     }
-
 
     @Override
     public void run() {
@@ -95,22 +95,18 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
-        for (Tile tile : tilesToDraw) {
-            this.drawTile(tile, g2);
+        Drawer drawer = new Drawer(g2, getWidth(), getHeight());
+        drawer.drawBackground();
+        drawer.drawLogs(this.game.getLog().getLastXMessages(10));
+        for (Tile tile : roundData.getTilesToDraw()) {
+            drawer.drawTile(tile);
         }
         g2.dispose();
     }
 
-    public void drawTile(Tile tile, Graphics2D g2) {
-        Image image = tile.getImage();
-        Image scaled = image.getScaledInstance(tile.width, tile.height, Image.SCALE_SMOOTH);
 
-        g2.setColor(Color.WHITE);
-        g2.fillRect(tile.x, tile.y, tile.width, tile.height);
-        g2.drawString(String.valueOf(tile.getIndex() + 1), tile.x, tile.y + tile.height + 20);
-        g2.drawImage(scaled, tile.x, tile.y, null);
-    }
+
+
 
 
 }

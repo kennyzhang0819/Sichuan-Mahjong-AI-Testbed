@@ -1,4 +1,4 @@
-package model.Tiles;
+package model.tiles;
 
 import config.Config;
 

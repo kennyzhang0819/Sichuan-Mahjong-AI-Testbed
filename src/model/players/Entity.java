@@ -1,4 +1,4 @@
-package model;
+package model.players;
 
 public class Entity {
     public int x, y;

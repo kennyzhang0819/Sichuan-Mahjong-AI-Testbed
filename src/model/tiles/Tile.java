@@ -1,6 +1,6 @@
-package model.Tiles;
+package model.tiles;
 
-import model.Entity;
+import model.players.Entity;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
