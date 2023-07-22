@@ -43,4 +43,31 @@ public class Config {
 
 
 
+    //AITable
+    public static final int AI_TABLE_PADDING = 50;
+    public static final int AI_TABLE_Y = 100;
+    public static final int AI_TABLE_WIDTH = 350;
+    public static final int AI_TABLE_HEIGHT = 300;
+
+    //AI1Table
+    public static final int AI1_TABLE_X = 200;
+    public static final int AI1_TABLE_Y = AI_TABLE_Y;
+    public static final int AI1_TABLE_WIDTH = AI_TABLE_WIDTH;
+    public static final int AI1_TABLE_HEIGHT = AI_TABLE_HEIGHT;
+
+    //AI2Table
+    public static final int AI2_TABLE_X = AI1_TABLE_X + AI1_TABLE_WIDTH + AI_TABLE_PADDING;
+    public static final int AI2_TABLE_Y = AI_TABLE_Y;
+    public static final int AI2_TABLE_WIDTH = AI_TABLE_WIDTH;
+    public static final int AI2_TABLE_HEIGHT = AI_TABLE_HEIGHT;
+
+    //AI3Table
+    public static final int AI3_TABLE_X = AI2_TABLE_X + AI2_TABLE_WIDTH + AI_TABLE_PADDING;
+    public static final int AI3_TABLE_Y = AI_TABLE_Y;
+    public static final int AI3_TABLE_WIDTH = AI_TABLE_WIDTH;
+    public static final int AI3_TABLE_HEIGHT = AI_TABLE_HEIGHT;
+
+
+
+
 }

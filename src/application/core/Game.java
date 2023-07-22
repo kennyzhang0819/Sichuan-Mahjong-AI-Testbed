@@ -1,4 +1,4 @@
-package application;
+package application.core;
 
 import model.log.Log;
 import model.players.ai.DummyAI;
@@ -81,7 +81,10 @@ public class Game {
         }
         List<Tile> playerHand = output.get("PlayerHand");
         List<Tile> playerTable = output.get("PlayerTable");
-        return new RoundData(turnPlayer, gameTurn.getRound(), playerHand, playerTable);
+        List<Tile> ai1Table = output.get("AI 1Table");
+        List<Tile> ai2Table = output.get("AI 2Table");
+        List<Tile> ai3Table = output.get("AI 3Table");
+        return new RoundData(turnPlayer, gameTurn.getRound(), playerHand, playerTable, ai1Table, ai2Table, ai3Table);
     }
 
 
