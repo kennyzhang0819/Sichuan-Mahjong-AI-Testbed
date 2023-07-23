@@ -1,11 +1,11 @@
 package application;
 
 import application.core.Game;
-import application.core.OutputData;
+import model.OutputData;
 import config.Config;
-import model.Entity;
+import model.basic.Entity;
 import model.players.Player;
-import model.tiles.Tile;
+import model.basic.Tile;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
 package utils;
 
 import config.Config;
-import model.tiles.Tile;
+import model.basic.Tile;
 
 import java.util.List;
 import java.util.concurrent.Executors;

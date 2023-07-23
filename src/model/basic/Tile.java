@@ -17,7 +17,7 @@ public class Tile extends Entity {
         this.category = category;
         this.number = number;
         try {
-            String path = "C:\\Users\\DELL\\Desktop\\Mahjong\\MahjongGame\\img\\" +
+            String path = "C:\\Users\\DELL\\Desktop\\Mahjong\\MahjongGame\\Mahjong-Game-Java\\img\\" +
                     category + "\\0" + number + ".png";
             this.image = ImageIO.read(new File(path));
         } catch (IOException e) {

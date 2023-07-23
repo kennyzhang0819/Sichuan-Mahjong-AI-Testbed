@@ -1,7 +1,7 @@
 package application;
 
-import model.Entity;
-import model.tiles.Tile;
+import model.basic.Entity;
+import model.basic.Tile;
 
 import java.awt.*;
 import java.util.List;
