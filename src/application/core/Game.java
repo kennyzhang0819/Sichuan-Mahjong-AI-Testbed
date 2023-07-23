@@ -1,5 +1,6 @@
 package application.core;
 
+import application.core.validation.PlayerStatusChecker;
 import model.OutputData;
 import model.basic.TileTypeEnum;
 import model.log.Log;
@@ -13,13 +14,15 @@ import model.tiles.HandTiles;
 import java.util.*;
 
 public class Game {
+    private boolean ended;
     private final List<Tile> tiles;
     private final List<Tile> allTiles;
     private final List<Player> players;
     private GameTurn gameTurn;
-    private Log log;
+    private final Log log;
 
     public Game() {
+        this.ended = false;
         this.log = new Log();
         this.tiles = new ArrayList<>();
         players = new ArrayList<Player>() {{
@@ -69,13 +72,21 @@ public class Game {
 
     public OutputData next() {
         Player turnPlayer = this.players.get(this.gameTurn.next());
+        new PlayerStatusChecker(turnPlayer).updateStatus();
         log.addMessage(turnPlayer.getName() + "'s turn");
         if (gameTurn.getRound() != 1) {
             turnPlayer.addTile(this.getNextTile());
         }
         turnPlayer.action();
+
         OutputData data = this.getRoundData(turnPlayer);
-        log.addMessage(turnPlayer.getName() + " played, with " + data.getPlayerHand().size() + " tiles on hand");
+        if (turnPlayer == this.players.get(0)) {
+            log.addMessage(turnPlayer.getName() + " has " + data.getPlayerHand().size() + " tiles on hand, " +
+                    "directing to " + turnPlayer.getName() + " for action");
+        } else {
+            log.addMessage(turnPlayer.getName() + " played, with " + data.getPlayerHand().size() + " tiles on hand");
+        }
+
         return data;
     }
 
@@ -108,7 +119,7 @@ public class Game {
     public Tile getNextTile() {
         if (tiles.size() == 0) {
             log.addMessage("No more tiles");
-            System.out.println("No more tiles");
+            this.ended = true;
             return null;
         }
         return this.tiles.remove(0);
@@ -120,5 +131,9 @@ public class Game {
 
     public Log getLog() {
         return log;
+    }
+
+    public boolean isOver() {
+        return ended;
     }
 }

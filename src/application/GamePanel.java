@@ -1,17 +1,17 @@
 package application;
 
 import application.core.Game;
+import application.core.validation.PlayerStatusChecker;
 import model.OutputData;
 import config.Config;
 import model.basic.Entity;
 import model.players.Player;
 import model.basic.Tile;
+import model.players.PlayerStatusEnum;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import static utils.TileUtils.*;
@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Thread gameThread;
     private Game game;
+    private PlayerStatusChecker checker;
     private OutputData outputData;
     private Player player;
     private Tile hoveredTile = null;
@@ -41,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+
                 if (hoveredTile != null) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
@@ -71,6 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         });
+
     }
 
     public void initBoxes() {
@@ -110,7 +113,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-
+        if (this.game.isOver()) {
+            this.gameThread = null;
+        }
     }
 
     @Override
