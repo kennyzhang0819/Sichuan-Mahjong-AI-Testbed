@@ -8,25 +8,25 @@ import java.util.Objects;
 
 public class Tile extends Entity {
     private int index;
-    private TileCategoryEnum category;
+    private TileTypeEnum type;
     private int number;
     private BufferedImage image;
 
-    public Tile(TileCategoryEnum category, int number) {
+    public Tile(TileTypeEnum type, int number) {
         super(0,0,0,0);
-        this.category = category;
+        this.type = type;
         this.number = number;
         try {
             String path = "C:\\Users\\DELL\\Desktop\\Mahjong\\MahjongGame\\Mahjong-Game-Java\\img\\" +
-                    category + "\\0" + number + ".png";
+                    type.getEnglish() + "\\0" + number + ".png";
             this.image = ImageIO.read(new File(path));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public TileCategoryEnum getCategory() {
-        return category;
+    public TileTypeEnum getType() {
+        return type;
     }
 
     public int getNumber() {
@@ -47,7 +47,7 @@ public class Tile extends Entity {
 
     @Override
     public String toString() {
-        return category + " " + number;
+        return type + String.valueOf(number);
     }
 
     @Override
@@ -55,11 +55,11 @@ public class Tile extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tile tile = (Tile) o;
-        return number == tile.number && Objects.equals(category, tile.category);
+        return number == tile.number && Objects.equals(type, tile.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(category, number);
+        return Objects.hash(type, number);
     }
 }

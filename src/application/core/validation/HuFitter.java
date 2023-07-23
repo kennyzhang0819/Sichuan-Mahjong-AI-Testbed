@@ -1,20 +1,19 @@
 package application.core.validation;
 
-import model.basic.TileCategoryEnum;
+import model.basic.TileTypeEnum;
 import model.tiles.Group;
 import model.basic.Tile;
 import utils.Utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HuFitter {
     private final List<Group> allGroups;
     private final List<Group> allGroupsOf3;
     private final Set<Group> pair;
     private final Set<Group> sequence;
+    private final Set<Group> sequenceDup;
     private final Set<Group> triple;
     private final Set<Group> pung;
 
@@ -26,22 +25,38 @@ public class HuFitter {
         this.triple = triple;
         this.pung = pung;
         this.kong = kong;
-        Set<Group> allGroups = new HashSet<>();
-        allGroups.addAll(this.sequence);
-        allGroups.addAll(this.triple);
-        allGroups.addAll(this.pair);
-        allGroups.addAll(this.kong);
-        this.allGroups = new ArrayList<>(allGroups);
-        Set<Group> allGroupsOf3 = new HashSet<>();
-        allGroupsOf3.addAll(this.sequence);
-        allGroupsOf3.addAll(this.triple);
-        this.allGroupsOf3 = new ArrayList<>(allGroupsOf3);
+
+        this.sequenceDup = new HashSet<>();
+        List<Group> sequenceDup = new ArrayList<>(this.sequence);
+        for (Group group: sequenceDup) {
+            this.sequenceDup.add(group.getDup());
+        }
+        this.allGroups = new ArrayList<>();
+        this.allGroups.addAll(this.sequence);
+        this.allGroups.addAll(this.triple);
+        this.allGroups.addAll(this.pair);
+        this.allGroups.addAll(this.kong);
+        this.allGroupsOf3 = new ArrayList<>();
+        this.allGroupsOf3.addAll(this.sequence);
+        this.allGroupsOf3.addAll(this.sequenceDup);
+        this.allGroupsOf3.addAll(this.triple);
+    }
+
+    public Set<List<Group>> fitAllHu() {
+        List<Set<List<Group>>> listOfSets = Arrays.asList(
+                this.fitStandardHu(),
+                this.fitSevenPairsHu());
+        Set<List<Group>> result = listOfSets.stream()
+                .flatMap(set -> set.stream())
+                .collect(Collectors.toSet());
+        return result;
     }
 
     public Set<List<Group>> fitStandardHu() {
         Set<List<Group>> result = new HashSet<>();
         for (Group pair : this.pair) {
-            for (Set<Group> groupOf3 : Utils.getCombinations(this.allGroupsOf3, 4)) {
+            Set<Set<Group>> combinations = Utils.getCombinations(this.allGroupsOf3, 4);
+            for (Set<Group> groupOf3 : combinations) {
                 List<Group> temp = new ArrayList<>();
                 temp.add(pair);
                 temp.addAll(groupOf3);
@@ -71,7 +86,7 @@ public class HuFitter {
             result.add(temp);
             return result;
         }
-        if (this.isPure((List<Group>) this.pair)) {
+        if (this.isPure(new ArrayList<>(this.pair))) {
             //Pure7Pairs
             result.add(new ArrayList<>(this.pair));
             return result;
@@ -81,10 +96,10 @@ public class HuFitter {
     }
 
     private boolean isPure(List<Group> groups) {
-        TileCategoryEnum category = groups.get(0).toList().get(0).getCategory();
+        TileTypeEnum category = groups.get(0).toList().get(0).getType();
         for (Group group : groups) {
             for (Tile tile : group.toList()) {
-                if (!tile.getCategory().equals(category)) {
+                if (!tile.getType().equals(category)) {
                     return false;
                 }
             }

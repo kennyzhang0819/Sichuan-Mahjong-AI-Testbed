@@ -1,7 +1,7 @@
 package application.core;
 
 import model.OutputData;
-import model.basic.TileCategoryEnum;
+import model.basic.TileTypeEnum;
 import model.log.Log;
 import model.players.AI1;
 import model.players.Player;
@@ -29,9 +29,9 @@ public class Game {
             add(new AI3("AI3", new ArrayList<>()));
         }};
         log.addMessage("Players created");
-        TileCategoryEnum[] categories = {TileCategoryEnum.BAMBOO,
-                TileCategoryEnum.CHARACTER, TileCategoryEnum.DOT};
-        for (TileCategoryEnum category : categories) {
+        TileTypeEnum[] categories = {TileTypeEnum.B,
+                TileTypeEnum.C, TileTypeEnum.D};
+        for (TileTypeEnum category : categories) {
             for (int i = 1; i <= 9; i++) {
                 for (int j = 0; j < 4; j++) {
                     this.tiles.add(new Tile(category, i));

@@ -1,14 +1,14 @@
 package model.basic;
 
-public enum TileCategoryEnum {
-    BAMBOO("Bamboo", "条"),
-    CHARACTER("Character", "万"),
-    DOT("Dot", "筒");
+public enum TileTypeEnum {
+    B("Bamboo", "条"),
+    C("Character", "万"),
+    D("Dot", "筒");
 
     private final String english;
     private final String chinese;
 
-    TileCategoryEnum(String english, String chinese) {
+    TileTypeEnum(String english, String chinese) {
         this.english = english;
         this.chinese = chinese;
     }

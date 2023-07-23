@@ -36,10 +36,10 @@ public class Tiles{
 
     public void sort() {
         this.tiles.sort((tile1, tile2) -> {
-            if (tile1.getCategory().equals(tile2.getCategory())) {
+            if (tile1.getType().equals(tile2.getType())) {
                 return tile1.getNumber() - tile2.getNumber();
             } else {
-                return tile1.getCategory().compareTo(tile2.getCategory());
+                return tile1.getType().compareTo(tile2.getType());
             }
         });
         this.updateIndex();
