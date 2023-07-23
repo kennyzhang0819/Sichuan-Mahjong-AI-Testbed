@@ -15,18 +15,21 @@ public class Test {
         List<List<Tile>> randomTiles = new ArrayList<>();
 
 
-        for (int i = 0; i < 1000; i++) {
-            randomTiles.add(generator.generateRandomHand());
-        }
+//        for (int i = 0; i < 1000; i++) {
+//            randomTiles.add(generator.generateRandomHand());
+//        }
 //        for (int i = 0; i < 100; i++) {
 //            randomTiles.add(generator.generateLikelyStandardHuHand());
 //        }
+        for (int i = 0; i < 1000; i++) {
+            randomTiles.add(generator.generatePairHand());
+        }
         for (List<Tile> hand : randomTiles) {
             validator1.setTiles(hand);
             if (validator1.checkHu()) {
-                System.out.println("Testing " + hand.toString() + " | " + true);
+//                System.out.println("Testing " + hand.toString() + " | " + true);
             } else {
-//                System.out.println("Testing " + hand.toString() + " | " + false);
+                System.out.println("Testing " + hand.toString() + " | " + false);
             }
         }
 

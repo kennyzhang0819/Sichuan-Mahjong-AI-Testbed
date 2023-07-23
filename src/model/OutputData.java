@@ -12,21 +12,30 @@ public class OutputData {
     private final int round;
 
     private final List<Tile> playerHand;
+    private final List<Tile> playerKong;
+    private final List<Tile> playerPung;
+    private final Tile playerNewTile;
     private final List<Tile> playerTable;
     private final List<Tile> ai1Table;
     private final List<Tile> ai2Table;
     private final List<Tile> ai3Table;
     private final List<Tile> tilesToDraw;
 
-    public OutputData(Player turnPlayer, int round, List<Tile> playerHand, List<Tile> playerTable, List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
+    public OutputData(Player turnPlayer, int round, List<Tile> playerHand, List<Tile> playerKong,
+                      List<Tile> playerPung, Tile playerNewTile, List<Tile> playerTable,
+                      List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
         this.turnPlayer = turnPlayer;
         this.round = round;
         this.playerHand = playerHand;
+        this.playerKong = playerKong;
+        this.playerPung = playerPung;
+        this.playerNewTile = playerNewTile;
         this.playerTable = playerTable;
         this.ai1Table = ai1Table;
         this.ai2Table = ai2Table;
         this.ai3Table = ai3Table;
-        this.tilesToDraw = Stream.of(playerHand, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
+        this.tilesToDraw = Stream.of(playerHand, playerKong, playerPung, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
+        this.tilesToDraw.add(playerNewTile);
     }
 
     public Player getTurnPlayer() {
@@ -39,6 +48,18 @@ public class OutputData {
 
     public List<Tile> getPlayerHand() {
         return playerHand;
+    }
+
+    public List<Tile> getPlayerKong() {
+        return playerKong;
+    }
+
+    public List<Tile> getPlayerPung() {
+        return playerPung;
+    }
+
+    public Tile getPlayerNewTile() {
+        return playerNewTile;
     }
 
     public List<Tile> getPlayerTable() {
@@ -67,6 +88,9 @@ public class OutputData {
                 "turnPlayer=" + turnPlayer +
                 ", round=" + round +
                 ", playerHand=" + playerHand +
+                ", playerKong=" + playerKong +
+                ", playerPung=" + playerPung +
+                ", playerNewTile=" + playerNewTile +
                 ", playerTable=" + playerTable +
                 ", ai1Table=" + ai1Table +
                 ", ai2Table=" + ai2Table +

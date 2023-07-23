@@ -15,7 +15,6 @@ public class Group extends Tiles{
         this.category = category;
         this.identification = identification;
     }
-
     public GroupEnum getCategory() {
         return category;
     }

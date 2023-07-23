@@ -9,14 +9,15 @@ import java.util.List;
 import java.util.Random;
 
 public class HandGenerator {
-
+    private final Random random = new Random();
     private static final TileTypeEnum[] TILE_TYPES = {TileTypeEnum.B, TileTypeEnum.C, TileTypeEnum.D};
     private static final int HAND_SIZE = 14;
     private static final int TILE_NUMBER_RANGE = 9;
     private static final int TRIPLET_SIZE = 3;
     private static final int SEQUENCE_SIZE = 3;
     private static final int PAIR_SIZE = 2;
-    private final Random random = new Random();
+
+
 
     public List<Tile> generateRandomHand() {
         List<Tile> hand = new ArrayList<>();
@@ -59,6 +60,19 @@ public class HandGenerator {
             }
         }
 
+
+        return hand;
+    }
+
+    public List<Tile> generatePairHand() {
+        List<Tile> hand = new ArrayList<>();
+        TileTypeEnum[] twoTypes = {TILE_TYPES[random.nextInt(TILE_TYPES.length)], TILE_TYPES[random.nextInt(TILE_TYPES.length)]};
+        for (int i = 0; i < HAND_SIZE / 2; i++) {
+            TileTypeEnum type = twoTypes[random.nextInt(twoTypes.length)];
+            int number = random.nextInt(TILE_NUMBER_RANGE) + 1;
+            hand.add(new Tile(type, number));
+            hand.add(new Tile(type, number));
+        }
 
         return hand;
     }

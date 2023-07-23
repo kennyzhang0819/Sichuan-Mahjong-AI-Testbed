@@ -28,7 +28,7 @@ public class Config {
     public static final int PLAYER_HAND_HEIGHT = 200;
     public static final int PLAYER_HAND_LEFT_INDENT = PLAYER_HAND_X + 50;
     public static final int PLAYER_HAND_TOP_INDENT = PLAYER_HAND_Y + 50;
-    public static final int FOURTEENTH_TILE_INDENT = 80;
+    public static final int FOURTEENTH_TILE_INDENT = 950;
     public static final int PLAYER_HAND_TILE_PADDING = 10;
 
     //Table Commons
@@ -44,10 +44,12 @@ public class Config {
     public static final int PLAYER_TABLE_HEIGHT = 100;
 
     //AITable
-    public static final int AI_TABLE_PADDING = 50;
+    public static final int AI_TABLE_PADDING = 100;
     public static final int AI_TABLE_Y = 100;
-    public static final int AI_TABLE_WIDTH = 350;
+    public static final int AI_TABLE_WIDTH = 300;
     public static final int AI_TABLE_HEIGHT = 300;
+    public static final int AI_TABLE_NUM_TILES_PER_LINE = 6;
+
 
     //AI1Table
     public static final int AI1_TABLE_X = 200;

@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 
 import static utils.TileUtils.*;
 
@@ -21,11 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Game game;
     private OutputData outputData;
     private Player player;
-
     private Tile hoveredTile = null;
-
-
-
     private Entity playerHand;
     private Entity playerTable;
     private Entity ai1Table;
@@ -58,7 +55,10 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), outputData.getPlayerHand());
+                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), new ArrayList<Tile>() {{
+                    this.addAll(outputData.getPlayerHand());
+                    this.add(outputData.getPlayerNewTile());
+                }});
 
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {

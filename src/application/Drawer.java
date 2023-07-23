@@ -24,7 +24,7 @@ public class Drawer {
 
         g2.setColor(Color.WHITE);
         g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
-        g2.drawString(String.valueOf(tile.getIndex() + 1),(int) tile.x,(int) tile.y + tile.height + 20);
+//        g2.drawString(String.valueOf(tile.getIndex() + 1),(int) tile.x,(int) tile.y + tile.height + 20);
         g2.drawImage(scaled,(int) tile.x,(int) tile.y, null);
     }
 

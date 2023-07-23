@@ -61,6 +61,7 @@ public class Game {
         int random = new Random().nextInt(this.players.size());
         Player player = players.get(random);
         player.addTile(this.getNextTile());
+
         log.addMessage("Tiles dealt");
         log.addMessage(player.getName() + " starts the game");
         this.gameTurn = new GameTurn(players, player);
@@ -78,18 +79,28 @@ public class Game {
         return data;
     }
 
+    //Data Packaging
     private OutputData getRoundData(Player turnPlayer) {
         Map<String, List<Tile>> output = new HashMap<>();
         for (Player player : this.players) {
             output.put(player.getName() + "Hand", player.getHand().toList());
             output.put(player.getName() + "Table", player.getTable().toList());
         }
-        List<Tile> playerHand = output.get("PlayerHand");
+        List<Tile> playerHandList = output.get("PlayerHand");
         List<Tile> playerTable = output.get("PlayerTable");
         List<Tile> ai1Table = output.get("AI1Table");
         List<Tile> ai2Table = output.get("AI2Table");
         List<Tile> ai3Table = output.get("AI3Table");
-        return new OutputData(turnPlayer, gameTurn.getRound(), playerHand, playerTable, ai1Table, ai2Table, ai3Table);
+
+        HandTiles playerHand = this.players.get(0).getHand();
+        List<Tile> kong = new ArrayList<>();
+        playerHand.getKong().forEach(group -> kong.addAll(group.toList()));
+        List<Tile> pung = new ArrayList<>();
+        playerHand.getPung().forEach(group -> pung.addAll(group.toList()));
+        Tile newTile = playerHand.getNewTile();
+
+        return new OutputData(turnPlayer, gameTurn.getRound(), playerHandList,
+                kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table);
     }
 
 
