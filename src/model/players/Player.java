@@ -6,11 +6,10 @@ import model.basic.Tile;
 import model.tiles.Tiles;
 import utils.TileUtils;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Player{
-    protected PlayerStatusEnum status;
+    protected Set<PlayerStatusEnum> status;
     protected final String name;
     protected HandTiles hand;
     private final PlayerTableTiles table;
@@ -19,7 +18,9 @@ public class Player{
         this.name = name;
         this.hand = new HandTiles(hand);
         this.table = new PlayerTableTiles();
-        this.status = PlayerStatusEnum.WAIT;
+        this.status = new HashSet<PlayerStatusEnum>() {{
+            add(PlayerStatusEnum.WAITING);
+        }};
     }
 
     public void plays(Tile tile) {
@@ -44,12 +45,52 @@ public class Player{
         this.hand = tiles;
     }
 
-    public PlayerStatusEnum getStatus() {
+    public Set<PlayerStatusEnum> getStatus() {
         return status;
     }
 
-    public void setStatus(PlayerStatusEnum status) {
-        this.status = status;
+    public boolean getSkippable() {
+        return this.status.contains(PlayerStatusEnum.WAITING)
+                && (this.status.contains(PlayerStatusEnum.CHOW)
+        || this.status.contains(PlayerStatusEnum.PUNG)
+        || this.status.contains(PlayerStatusEnum.KONG));
+    }
+
+    //Status Setters
+    public void setPlayingStatus() {
+        if (this.status.contains(PlayerStatusEnum.WAITING)) {
+            this.status.remove(PlayerStatusEnum.WAITING);
+            this.status.add(PlayerStatusEnum.PLAYING);
+        }
+    }
+
+    public void setWaitingStatus() {
+        if (this.status.contains(PlayerStatusEnum.PLAYING)) {
+            this.status.remove(PlayerStatusEnum.PLAYING);
+            this.status.add(PlayerStatusEnum.WAITING);
+        }
+    }
+
+    public void setHuStatus() {
+        this.status.add(PlayerStatusEnum.HU);
+    }
+
+    public void setKongStatus() {
+        this.status.add(PlayerStatusEnum.KONG);
+    }
+
+    public void setPungStatus() {
+        this.status.add(PlayerStatusEnum.PUNG);
+    }
+
+    public void setChowStatus() {
+        this.status.add(PlayerStatusEnum.CHOW);
+    }
+
+    public void clearStatus() {
+        this.status.remove(PlayerStatusEnum.CHOW);
+        this.status.remove(PlayerStatusEnum.PUNG);
+        this.status.remove(PlayerStatusEnum.KONG);
     }
 
     public void addTile(Tile tile) {
@@ -78,4 +119,6 @@ public class Player{
         return "Player{" +
                 "name='" + name + '}';
     }
+
+
 }

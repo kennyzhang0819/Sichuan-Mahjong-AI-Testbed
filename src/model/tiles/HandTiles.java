@@ -30,6 +30,7 @@ public class HandTiles extends Tiles {
     public void remove(Tile tile) {
         if (tile == this.newTile) {
             this.newTile = null;
+            this.sort();
             return;
         }
         for (Tile t : this.tiles) {
@@ -94,6 +95,25 @@ public class HandTiles extends Tiles {
             this.newTile.y = Config.PLAYER_HAND_TOP_INDENT;
             this.newTile.width = Config.TILE_WIDTH;
             this.newTile.height = (int) (Config.TILE_HEIGHT);
+        }
+
+        if (this.pung != null) {
+            for (int i = 0; i < this.pung.size(); i++) {
+                Group group = this.pung.get(i);
+                for (int j = 0; j < group.toList().size(); j++) {
+                    Tile tile = group.toList().get(j);
+                    tile.x = Config.PLAYER_HAND_LEFT_INDENT
+                            + Config.PLAYER_HAND_TILE_PADDING
+                            + Config.TILE_WIDTH
+                            + Config.FOURTEENTH_TILE_INDENT
+                            + Config.TILE_WIDTH
+                            + Config.PLAYER_HAND_TILE_PADDING
+                            + Config.TILE_WIDTH * j;
+                    tile.y = Config.PLAYER_HAND_TOP_INDENT;
+                    tile.width = Config.TILE_WIDTH;
+                    tile.height = (int) (Config.TILE_HEIGHT);
+                }
+            }
         }
     }
 }

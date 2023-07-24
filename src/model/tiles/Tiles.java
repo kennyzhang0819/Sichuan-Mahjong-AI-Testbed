@@ -56,11 +56,19 @@ public class Tiles{
         return;
     }
 
+    public Tile getLast() {
+        return this.tiles.get(this.tiles.size() - 1);
+    }
+
+    public void removeLast() {
+        this.tiles.remove(this.tiles.size() - 1);
+    }
+
     public List<Tile> toList() {
         if (tiles == null) {
             return new ArrayList<>();
         }
-        return tiles;
+        return new ArrayList<>(tiles);
     }
 
     @Override

@@ -1,13 +1,10 @@
 package application.core;
 
 import application.core.validation.PlayerStatusChecker;
-import model.OutputData;
+import model.GameState;
 import model.basic.TileTypeEnum;
 import model.log.Log;
-import model.players.AI1;
-import model.players.Player;
-import model.players.AI2;
-import model.players.AI3;
+import model.players.*;
 import model.basic.Tile;
 import model.tiles.HandTiles;
 
@@ -18,8 +15,11 @@ public class Game {
     private final List<Tile> tiles;
     private final List<Tile> allTiles;
     private final List<Player> players;
+    private final Player player;
+    private Player turnPlayer;
     private GameTurn gameTurn;
     private final Log log;
+    private int leftOverRounds;
 
     public Game() {
         this.ended = false;
@@ -31,7 +31,7 @@ public class Game {
             add(new AI2("AI2", new ArrayList<>()));
             add(new AI3("AI3", new ArrayList<>()));
         }};
-        log.addMessage("Players created");
+        this.player = players.get(0);
         TileTypeEnum[] categories = {TileTypeEnum.B,
                 TileTypeEnum.C, TileTypeEnum.D};
         for (TileTypeEnum category : categories) {
@@ -42,9 +42,8 @@ public class Game {
             }
         }
         this.allTiles = new ArrayList<>(this.tiles);
-        log.addMessage("Tiles created");
         Collections.shuffle(tiles);
-        log.addMessage("Tiles shuffled");
+        log.addMessage("Tiles created and shuffled");
         this.deal();
         while (!Objects.equals(this.gameTurn.peek().getName(), "Player")) {
             this.next();
@@ -64,34 +63,79 @@ public class Game {
         int random = new Random().nextInt(this.players.size());
         Player player = players.get(random);
         player.addTile(this.getNextTile());
+        player.setPlayingStatus();
 
         log.addMessage("Tiles dealt");
         log.addMessage(player.getName() + " starts the game");
         this.gameTurn = new GameTurn(players, player);
     }
 
-    public OutputData next() {
-        Player turnPlayer = this.players.get(this.gameTurn.next());
-        new PlayerStatusChecker(turnPlayer).updateStatus();
+    public GameState next() {
+       this.turnPlayer = this.players.get(gameTurn.next());
+        if (turnPlayer.getStatus().contains(PlayerStatusEnum.HU)) {
+            this.ended = true;
+        }
         log.addMessage(turnPlayer.getName() + "'s turn");
         if (gameTurn.getRound() != 1) {
             turnPlayer.addTile(this.getNextTile());
+            new PlayerStatusChecker(turnPlayer, turnPlayer.getHand().getNewTile());
         }
-        turnPlayer.action();
-
-        OutputData data = this.getRoundData(turnPlayer);
-        if (turnPlayer == this.players.get(0)) {
-            log.addMessage(turnPlayer.getName() + " has " + data.getPlayerHand().size() + " tiles on hand, " +
-                    "directing to " + turnPlayer.getName() + " for action");
+        if (turnPlayer == this.player) {
+            log.addMessage("directing to " + turnPlayer.getName() + " for action");
+            return this.getGameState();
         } else {
-            log.addMessage(turnPlayer.getName() + " played, with " + data.getPlayerHand().size() + " tiles on hand");
+            turnPlayer.setPlayingStatus();
+            turnPlayer.action();
+            List<Player> next3Players = new ArrayList<Player>() {{
+                for (int i = 0; i < 3; i++) {
+                    add(gameTurn.peek());
+                }
+            }};
+            for (Player player : next3Players) {
+                new PlayerStatusChecker(player, turnPlayer.getHand().getLast());
+            }
+            log.addMessage(turnPlayer.getName() + " played");
+            turnPlayer.setWaitingStatus();
+            gameTurn.peek().setPlayingStatus();
+            return this.getGameState();
         }
-
-        return data;
     }
 
-    //Data Packaging
-    private OutputData getRoundData(Player turnPlayer) {
+    public GameState processPung(Player player) {
+        player.getHand().addPung(this.turnPlayer.getTable().getLast());
+        this.turnPlayer.getTable().removeLast();
+        this.gameTurn = new GameTurn(this.players, player);
+        return this.getGameState();
+    }
+
+    public GameState processPlayerSkipped() {
+        return this.playLeftOverRounds();
+    }
+
+    public GameState processPlayerPlayed() {
+        player.setWaitingStatus();
+        this.leftOverRounds = 5;
+        return this.playLeftOverRounds();
+    }
+
+    public GameState playLeftOverRounds() {
+        for (int i = 0; i < this.leftOverRounds; i++) {
+            this.next();
+            leftOverRounds--;
+            System.out.println(leftOverRounds);
+            if (this.player.getStatus().contains(PlayerStatusEnum.CHOW) ||
+                    this.player.getStatus().contains(PlayerStatusEnum.PUNG) ||
+                    this.player.getStatus().contains(PlayerStatusEnum.KONG)) {
+                log.addMessage("press c to chow, p to pung, k to kong, or s to skip");
+                return this.getGameState();
+            }
+        }
+        return this.getGameState();
+    }
+
+
+    // getters
+    public GameState getGameState() {
         Map<String, List<Tile>> output = new HashMap<>();
         for (Player player : this.players) {
             output.put(player.getName() + "Hand", player.getHand().toList());
@@ -103,19 +147,17 @@ public class Game {
         List<Tile> ai2Table = output.get("AI2Table");
         List<Tile> ai3Table = output.get("AI3Table");
 
-        HandTiles playerHand = this.players.get(0).getHand();
+        HandTiles playerHand = this.player.getHand();
         List<Tile> kong = new ArrayList<>();
         playerHand.getKong().forEach(group -> kong.addAll(group.toList()));
         List<Tile> pung = new ArrayList<>();
         playerHand.getPung().forEach(group -> pung.addAll(group.toList()));
         Tile newTile = playerHand.getNewTile();
 
-        return new OutputData(turnPlayer, gameTurn.getRound(), playerHandList,
+        return new GameState(this.turnPlayer, this.players, gameTurn.getRound(), playerHandList,
                 kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table);
     }
 
-
-    // getters
     public Tile getNextTile() {
         if (tiles.size() == 0) {
             log.addMessage("No more tiles");
@@ -136,4 +178,6 @@ public class Game {
     public boolean isOver() {
         return ended;
     }
+
+
 }

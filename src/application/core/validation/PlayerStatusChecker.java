@@ -4,7 +4,6 @@ import model.players.Player;
 import model.players.PlayerStatusEnum;
 import model.tiles.Group;
 import model.tiles.GroupEnum;
-import model.tiles.HandTiles;
 import model.basic.Tile;
 
 import java.util.*;
@@ -19,21 +18,21 @@ public class PlayerStatusChecker {
     private Set<Group> pung;
     private Set<Group> kong;
 
-    public PlayerStatusChecker(Player player) {
+    public PlayerStatusChecker(Player player, Tile newTile) {
         this.player = player;
-        HandTiles tiles = player.getHand();
-        assert (tiles.getClass() == HandTiles.class);
-        this.setTiles(tiles.toList());
+        List<Tile> tiles = player.getHand().toList();
+        tiles.add(newTile);
+        this.setTiles(tiles);
     }
 
-    public void setTiles(List<Tile> tiles) {
+    private void setTiles(List<Tile> tiles) {
         this.pair = new HashSet<>();
         this.sequence = new HashSet<>();
         this.triple = new HashSet<>();
         this.pung = new HashSet<>();
         this.kong = new HashSet<>();
         this.categorizedTiles = new HashMap<>();
-        this.tiles = tiles;
+        this.tiles = new ArrayList<>(tiles);
         this.tiles.sort(Comparator.comparing(Tile::getType).thenComparing(Tile::getNumber));
         for (Tile tile : this.tiles) {
             this.categorizedTiles.computeIfAbsent(tile.getType().getEnglish(), k -> new ArrayList<>()).add(tile);
@@ -41,13 +40,49 @@ public class PlayerStatusChecker {
         for (List<Tile> tileByCategory : this.categorizedTiles.values()) {
             this.generateSets(tileByCategory);
         }
+        this.updateStatus();
     }
 
     public void updateStatus() {
+        this.player.clearStatus();
+        if (this.player.getStatus().contains(PlayerStatusEnum.PLAYING)) {
+            if (this.checkHu()) {
+                this.player.setHuStatus();
+            }
+            return;
+        }
+        //player has to be waiting
         if (this.checkHu()) {
-            this.player.setStatus(PlayerStatusEnum.HU);
+            this.player.setChowStatus();
+        }
+        if (this.checkKong()) {
+            this.player.setKongStatus();
+        }
+        if (this.checkPung()) {
+            this.player.setPungStatus();
         }
     }
+
+    private boolean checkHu() {
+        HuFitter huFitter = new HuFitter(this.pair, this.sequence, this.triple, this.pung, this.kong);
+        Set<List<Group>> candidates = huFitter.fitAllHu();
+        for (List<Group> groups : candidates) {
+            if (this.canHuFromHand(this.tiles, groups)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkPung() {
+        return this.pung.size() > 0;
+    }
+
+    private boolean checkKong() {
+        return this.kong.size() > 0;
+    }
+
+
 
     private void generateSets(List<Tile> tiles) {
         if (tiles.size() < 2) {
@@ -83,20 +118,6 @@ public class PlayerStatusChecker {
                 this.sequence.add(new Group(Arrays.asList(tilesList.get(i), tilesList.get(i + 1), tilesList.get(i + 2)), GroupEnum.SEQUENCE, 1));
             }
         }
-    }
-
-    public boolean checkHu() {
-        if (categorizedTiles.keySet().size() > 2) {
-            return false;
-        }
-        HuFitter huFitter = new HuFitter(this.pair, this.sequence, this.triple, this.pung, this.kong);
-        Set<List<Group>> candidates = huFitter.fitAllHu();
-        for (List<Group> groups : candidates) {
-            if (this.canHuFromHand(this.tiles, groups)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean canHuFromHand(List<Tile> hand, Collection<Group> groups) {

@@ -24,7 +24,7 @@ public class Config {
     //PlayerHand
     public static final int PLAYER_HAND_X = 200;
     public static final int PLAYER_HAND_Y = 600;
-    public static final int PLAYER_HAND_WIDTH = SCREEN_WIDTH - 700;
+    public static final int PLAYER_HAND_WIDTH = 1200;
     public static final int PLAYER_HAND_HEIGHT = 200;
     public static final int PLAYER_HAND_LEFT_INDENT = PLAYER_HAND_X + 50;
     public static final int PLAYER_HAND_TOP_INDENT = PLAYER_HAND_Y + 50;
@@ -40,11 +40,11 @@ public class Config {
     //PlayerTable
     public static final int PLAYER_TABLE_X = 200;
     public static final int PLAYER_TABLE_Y = 500;
-    public static final int PLAYER_TABLE_WIDTH = SCREEN_WIDTH - 700;
+    public static final int PLAYER_TABLE_WIDTH = 1200;
     public static final int PLAYER_TABLE_HEIGHT = 100;
 
     //AITable
-    public static final int AI_TABLE_PADDING = 100;
+    public static final int AI_TABLE_PADDING = 50;
     public static final int AI_TABLE_Y = 100;
     public static final int AI_TABLE_WIDTH = 300;
     public static final int AI_TABLE_HEIGHT = 300;
@@ -52,7 +52,7 @@ public class Config {
 
 
     //AI1Table
-    public static final int AI1_TABLE_X = 200;
+    public static final int AI1_TABLE_X = 300;
     public static final int AI1_TABLE_Y = AI_TABLE_Y;
     public static final int AI1_TABLE_WIDTH = AI_TABLE_WIDTH;
     public static final int AI1_TABLE_HEIGHT = AI_TABLE_HEIGHT;

@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class OutputData {
+public class GameState {
     private final Player turnPlayer;
+    private final List<Player> allPlayers;
     private final int round;
 
     private final List<Tile> playerHand;
@@ -22,10 +23,11 @@ public class OutputData {
     private final List<Tile> ai3Table;
     private final List<Tile> tilesToDraw;
 
-    public OutputData(Player turnPlayer, int round, List<Tile> playerHand, List<Tile> playerKong,
-                      List<Tile> playerPung, Tile playerNewTile, List<Tile> playerTable,
-                      List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
+    public GameState(Player turnPlayer, List<Player> allPlayers, int round, List<Tile> playerHand, List<Tile> playerKong,
+                     List<Tile> playerPung, Tile playerNewTile, List<Tile> playerTable,
+                     List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
         this.turnPlayer = turnPlayer;
+        this.allPlayers = allPlayers;
         this.round = round;
         this.playerHand = playerHand;
         this.playerKong = playerKong;
@@ -36,11 +38,17 @@ public class OutputData {
         this.ai2Table = ai2Table;
         this.ai3Table = ai3Table;
         this.tilesToDraw = Stream.of(playerHand, playerKong, playerPung, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
-        this.tilesToDraw.add(playerNewTile);
+        if (this.playerNewTile != null) {
+            this.tilesToDraw.add(this.playerNewTile);
+        }
     }
 
     public Player getTurnPlayer() {
         return turnPlayer;
+    }
+
+    public List<Player> getAllPlayers() {
+        return allPlayers;
     }
 
     public int getRound() {
@@ -87,7 +95,7 @@ public class OutputData {
 
     @Override
     public String toString() {
-        return "OutputData{" +
+        return "GameState{" +
                 "turnPlayer=" + turnPlayer +
                 ", round=" + round +
                 ", playerHand=" + playerHand +

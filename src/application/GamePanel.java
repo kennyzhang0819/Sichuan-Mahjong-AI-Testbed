@@ -1,18 +1,16 @@
 package application;
 
 import application.core.Game;
-import application.core.validation.PlayerStatusChecker;
-import model.OutputData;
+import model.GameState;
 import config.Config;
 import model.basic.Entity;
 import model.players.Player;
 import model.basic.Tile;
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+import model.players.PlayerStatusEnum;
 
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -22,9 +20,9 @@ import static utils.TileUtils.*;
 public class GamePanel extends JPanel implements Runnable {
 
     Thread gameThread;
+    KeyHandler keyHandler = new KeyHandler();
     private Game game;
-    private PlayerStatusChecker checker;
-    private OutputData outputData;
+    private GameState gameState;
     private Player player;
     private Tile hoveredTile = null;
     private Entity playerHand;
@@ -32,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Entity ai1Table;
     private Entity ai2Table;
     private Entity ai3Table;
+
 
     public GamePanel() {
         setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
@@ -41,18 +40,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.game = new Game();
         this.player = this.game.getPlayers().get(0);
-        this.outputData = this.game.next();
+        this.gameState = this.game.next();
         this.initBoxes();
+        addKeyListener(keyHandler);
+        setFocusable(true);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (hoveredTile != null) {
+                if (hoveredTile != null && player.getStatus().contains(PlayerStatusEnum.PLAYING)) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
-                    for (int i = 0; i < 4; i++) {
-                        outputData = game.next();
-                    }
+                    gameState = game.processPlayerPlayed();
                     this.mouseMoved(e);
                 }
             }
@@ -62,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void mouseMoved(MouseEvent e) {
                 Tile newHoveredTile = getTileAt(e.getX(), e.getY(), new ArrayList<Tile>() {{
-                    this.addAll(outputData.getPlayerHand());
+                    this.addAll(gameState.getPlayerHand());
                 }});
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
@@ -76,7 +75,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
         });
     }
-
 
     public void initBoxes() {
         this.playerHand = new Entity(Config.PLAYER_HAND_X, Config.PLAYER_HAND_Y, Config.PLAYER_HAND_WIDTH, Config.PLAYER_HAND_HEIGHT);
@@ -118,6 +116,18 @@ public class GamePanel extends JPanel implements Runnable {
         if (this.game.isOver()) {
             this.gameThread = null;
         }
+        if (keyHandler.hPressed && player.getStatus().contains(PlayerStatusEnum.HU)) {
+            System.out.println(player.getName() + " wins!");
+        }
+        if (keyHandler.pPressed && player.getStatus().contains(PlayerStatusEnum.PUNG)) {
+            System.out.println("Pung!!!!!!!!!!!!!!!!!!!");
+            this.gameState = this.game.processPung(player);
+        }
+        if (keyHandler.sPressed && player.getSkippable()) {
+            System.out.println("Skip!!!!!!!!!!!!!!!!!!!");
+            this.gameState = this.game.processPlayerSkipped();
+        }
+        System.out.println(player.getStatus());
     }
 
     @Override
@@ -127,20 +137,15 @@ public class GamePanel extends JPanel implements Runnable {
         Drawer drawer = new Drawer(g2, getWidth(), getHeight());
         drawer.drawBackground();
         drawer.drawLogs(this.game.getLog().getLastXMessages(39));
+        drawer.drawInstructions();
         drawer.drawRect(playerHand);
         drawer.drawRect(playerTable);
         drawer.drawRect(ai1Table);
         drawer.drawRect(ai2Table);
         drawer.drawRect(ai3Table);
-        for (Tile tile : outputData.getTilesToDraw()) {
+        for (Tile tile : gameState.getTilesToDraw()) {
             drawer.drawTile(tile);
         }
         g2.dispose();
     }
-
-
-
-
-
-
 }

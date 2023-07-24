@@ -59,9 +59,6 @@ public class Drawer {
         g2.fillRect(logWindowX, padding, logWindowWidth, this.height - padding * 2);
         g2.setColor(Color.WHITE); // Change color for the text
 
-
-
-        // Draw each log line
         for (int i = 0; i < logs.size(); i++) {
             String log = logs.get(i);
             g2.drawString(log, logWindowX + textPadding, padding + textPadding + i * lineHeight);
@@ -73,4 +70,12 @@ public class Drawer {
         g2.drawRect((int) entity.x, (int) entity.y, entity.width, entity.height);
     }
 
+    public void drawInstructions() {
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 18));
+        g2.drawString("Press 'H' to Hu", 30, 30);
+        g2.drawString("Press 'C' to Chi", 30, 50);
+        g2.drawString("Press 'P' to Pung", 30, 70);
+        g2.drawString("Press 'K' to Kong", 30, 90);
+    }
 }
