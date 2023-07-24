@@ -32,13 +32,10 @@ public class GamePanel extends JPanel implements Runnable {
     private Entity ai1Table;
     private Entity ai2Table;
     private Entity ai3Table;
-    private JButton button1;
-    private JButton button2;
-    private JButton button3;
-    private JButton button4;
 
     public GamePanel() {
         setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
+        setBounds(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
@@ -46,8 +43,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.player = this.game.getPlayers().get(0);
         this.outputData = this.game.next();
         this.initBoxes();
-        this.initButtons();
-
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -68,7 +63,6 @@ public class GamePanel extends JPanel implements Runnable {
             public void mouseMoved(MouseEvent e) {
                 Tile newHoveredTile = getTileAt(e.getX(), e.getY(), new ArrayList<Tile>() {{
                     this.addAll(outputData.getPlayerHand());
-                    this.add(outputData.getPlayerNewTile());
                 }});
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
@@ -81,39 +75,8 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         });
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button 1 was clicked!");
-            }
-        });
-
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button 2 was clicked!");
-            }
-        });
-
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button 3 was clicked!");
-            }
-        });
-
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button 4 was clicked!");
-            }
-        });
-        add(button1);
-        add(button2);
-        add(button3);
-        add(button4);
-
     }
+
 
     public void initBoxes() {
         this.playerHand = new Entity(Config.PLAYER_HAND_X, Config.PLAYER_HAND_Y, Config.PLAYER_HAND_WIDTH, Config.PLAYER_HAND_HEIGHT);
@@ -121,13 +84,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.ai1Table = new Entity(Config.AI1_TABLE_X, Config.AI1_TABLE_Y, Config.AI1_TABLE_WIDTH, Config.AI1_TABLE_HEIGHT);
         this.ai2Table = new Entity(Config.AI2_TABLE_X, Config.AI2_TABLE_Y, Config.AI2_TABLE_WIDTH, Config.AI2_TABLE_HEIGHT);
         this.ai3Table = new Entity(Config.AI3_TABLE_X, Config.AI3_TABLE_Y, Config.AI3_TABLE_WIDTH, Config.AI3_TABLE_HEIGHT);
-    }
-
-    public void initButtons() {
-        button1 = new JButton("Button 1");
-        button2 = new JButton("Button 2");
-        button3 = new JButton("Button 3");
-        button4 = new JButton("Button 4");
     }
 
     public void start() {
@@ -179,7 +135,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (Tile tile : outputData.getTilesToDraw()) {
             drawer.drawTile(tile);
         }
-
         g2.dispose();
     }
 

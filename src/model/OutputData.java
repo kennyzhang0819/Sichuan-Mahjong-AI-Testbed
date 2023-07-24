@@ -3,6 +3,7 @@ package model;
 import model.players.Player;
 import model.basic.Tile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +48,9 @@ public class OutputData {
     }
 
     public List<Tile> getPlayerHand() {
-        return playerHand;
+        List<Tile> handWithNewTile = new ArrayList<>(playerHand);
+        handWithNewTile.add(playerNewTile);
+        return handWithNewTile;
     }
 
     public List<Tile> getPlayerKong() {
