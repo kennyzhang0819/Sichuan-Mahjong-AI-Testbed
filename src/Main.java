@@ -1,12 +1,9 @@
-import application.GameFrame;
 import application.GamePanel;
-import config.Config;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-/*
         JFrame window = new JFrame("Mahjong");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
@@ -18,26 +15,6 @@ public class Main {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
-        gamePanel.start();
-*/
-
-        JFrame window = new JFrame("Mahjong");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Mahjong");
-
-        GamePanel gamePanel = new GamePanel();
-        gamePanel.setBounds(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
-
-        // Assuming GameFrame uses a JLayeredPane
-        window.getLayeredPane().add(gamePanel, JLayeredPane.DEFAULT_LAYER);
-        window.getLayeredPane().add(createButtonPanel(), JLayeredPane.PALETTE_LAYER);
-
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-
         gamePanel.start();
     }
 
@@ -61,8 +38,6 @@ public class Main {
         buttonPanel.add(button4);
 
         return buttonPanel;
-
-
     }
 
     private static JButton createButton(String text) {
