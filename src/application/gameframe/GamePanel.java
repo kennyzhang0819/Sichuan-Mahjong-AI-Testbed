@@ -12,7 +12,6 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (hoveredTile != null && player.getStatus().contains(PlayerStatusEnum.PLAYING) &&
-                        !player.getChouPungKong()) {
+                        !player.containsChouPungKong()) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
                     game.processPlayerPlayed();
@@ -90,12 +89,18 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if (keyHandler.pPressed && !keyHandler.pProcessed
                 && player.getStatus().contains(PlayerStatusEnum.PUNG)) {
-            System.out.println("P pressed, going to process Pung now");
-            this.gameState = this.game.processPung(player);
+            this.game.processPung(player);
+            this.gameState = game.getGameState();
             keyHandler.pProcessed = true;
         }
+        if (keyHandler.kPressed && !keyHandler.kProcessed
+                && player.containsKong()) {
+            this.game.processKong(player);
+            this.gameState = game.getGameState();
+            keyHandler.kProcessed = true;
+        }
         if (keyHandler.sPressed
-                && player.getChouPungKong()) {
+                && player.containsChouPungKong()) {
             this.game.processPlayerSkipped();
             this.gameState = this.game.getGameState();
         }

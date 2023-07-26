@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Group extends Tiles{
 
-    private final GroupEnum category;
+    private GroupEnum category;
     private int identification;
 
     public Group(List<Tile> tiles, GroupEnum category, int identification) {
@@ -15,6 +15,11 @@ public class Group extends Tiles{
         this.category = category;
         this.identification = identification;
     }
+
+    public void setCategory(GroupEnum category) {
+        this.category = category;
+    }
+
     public GroupEnum getCategory() {
         return category;
     }

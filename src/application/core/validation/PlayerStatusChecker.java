@@ -1,10 +1,10 @@
 package application.core.validation;
 
+import model.basic.Tile;
 import model.players.Player;
 import model.players.PlayerStatusEnum;
 import model.tiles.Group;
 import model.tiles.GroupEnum;
-import model.basic.Tile;
 
 import java.util.*;
 
@@ -49,23 +49,27 @@ public class PlayerStatusChecker {
 
     public void updateStatus() {
         this.player.clearStatus();
-        if (this.player.getStatus().contains(PlayerStatusEnum.PLAYING)) {
-            if (this.checkHu()) {
+        if (this.checkHu()) {
+            if (this.player.isPlaying()) {
                 this.player.setHuStatus();
             }
-            return;
-        }
-        //player has to be waiting
-        if (this.checkHu()) {
             this.player.setChowStatus();
         }
-        if (this.checkKong()) {
-            this.player.setKongStatus();
-            System.out.println("setted kong status to " + this.player.getName());
-        }
-        if (this.checkPung()) {
+        if (this.pungKongChecker.canPung()) {
             this.player.setPungStatus();
             System.out.println("setted pung status to " + this.player.getName());
+        }
+        if (this.pungKongChecker.canNormalKong()) {
+            this.player.setNormalKongStatus();
+            System.out.println("setted Normal Kong status to " + this.player.getName());
+        }
+        if (this.pungKongChecker.canHiddenKong()) {
+            this.player.setHiddenKongStatus();
+            System.out.println("setted Hidden Kong status to " + this.player.getName());
+        }
+        if (this.pungKongChecker.canAddKong()) {
+            this.player.setAddKongStatus();
+            System.out.println("setted Add Kong status to " + this.player.getName());
         }
     }
 
@@ -80,16 +84,6 @@ public class PlayerStatusChecker {
         return false;
     }
 
-    private boolean checkPung() {
-        return this.pungKongChecker.canPung();
-    }
-
-    private boolean checkKong() {
-        return this.pungKongChecker.canKong();
-    }
-
-
-
     private void generateSets(List<Tile> tiles) {
         if (tiles.size() < 2) {
             return;
@@ -100,7 +94,7 @@ public class PlayerStatusChecker {
         for (int i = 0; i < tiles.size() - 2; i++) {
             for (int j = i + 1; j < tiles.size() - 1; j++) {
                 for (int k = j + 1; k < tiles.size(); k++) {
-                        this.setGroups(tiles.get(i), tiles.get(j), tiles.get(k));
+                    this.setGroups(tiles.get(i), tiles.get(j), tiles.get(k));
                 }
             }
         }

@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     public boolean hPressed, cPressed, pPressed, kPressed, sPressed;
     public boolean pProcessed = false;
+    public boolean kProcessed = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -28,6 +29,7 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_K) {
             this.kPressed = true;
+            this.kProcessed = false;
         }
         if (code == KeyEvent.VK_S) {
             this.sPressed = true;

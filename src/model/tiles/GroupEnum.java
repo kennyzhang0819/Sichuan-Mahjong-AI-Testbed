@@ -6,15 +6,10 @@ public enum GroupEnum {
     TRIPLE("刻子"),
     PAIR("对子"),
     PUNG("碰"),
-    KONG("杠");
-
-    private final String chinese;
+    NORMAL_KONG("普通杠"),
+    ADD_KONG("普通杠"),
+    HIDDEN_KONG("暗杠");
 
     GroupEnum(String chinese) {
-        this.chinese = chinese;
-    }
-
-    public String getChinese() {
-        return chinese;
     }
 }

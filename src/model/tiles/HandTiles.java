@@ -50,18 +50,6 @@ public class HandTiles extends Tiles {
         }
     }
 
-    public void addKong(Tile tile) {
-        ArrayList<Tile> kong = new ArrayList<Tile>() {{
-            add(tile);
-            add(tile);
-            add(tile);
-            add(tile);
-        }};
-        this.kong.add(new Group(kong, GroupEnum.KONG, 0));
-        this.tiles.removeAll(Collections.singletonList(tile));
-        this.sort();
-    }
-
     public void addPung(Tile tile) {
         List<Tile> pung = new ArrayList<Tile>() {{
             add(new Tile(tile.getType(), tile.getNumber()));
@@ -72,7 +60,41 @@ public class HandTiles extends Tiles {
         this.tiles.remove(tile);
         this.tiles.remove(tile);
         this.sort();
-        System.out.println(this.pung);
+    }
+
+    public void addNormalKong(Tile tile) {
+        List<Tile> kong = this.generateNewKong(tile);
+        this.kong.add(new Group(kong, GroupEnum.NORMAL_KONG, 0));
+        this.tiles.removeAll(Collections.singletonList(tile));
+        this.sort();
+    }
+
+    public void addAddKong(Tile tile) {
+        for (Group group : this.pung) {
+            if (group.toList().get(0) == tile) {
+                this.pung.remove(group);
+                break;
+            }
+        }
+        List<Tile> kong = this.generateNewKong(tile);
+        this.kong.add(new Group(kong, GroupEnum.ADD_KONG, 0));
+        this.newTile = null;
+        this.sort();
+    }
+
+    public void addHiddenKong(Tile tile) {
+        List<Tile> kong = this.generateNewKong(tile);
+        this.kong.add(new Group(kong, GroupEnum.HIDDEN_KONG, 0));
+        this.tiles.removeAll(Collections.singletonList(tile));
+        this.sort();
+    }
+    private List<Tile> generateNewKong(Tile tile) {
+        return new ArrayList<Tile>() {{
+            add(new Tile(tile.getType(), tile.getNumber()));
+            add(new Tile(tile.getType(), tile.getNumber()));
+            add(new Tile(tile.getType(), tile.getNumber()));
+            add(new Tile(tile.getType(), tile.getNumber()));
+        }};
     }
 
     public List<Group> getKong() {
@@ -106,11 +128,17 @@ public class HandTiles extends Tiles {
             this.newTile.height = Config.TILE_HEIGHT;
         }
 
-        if (this.pung != null && this.pung.size() > 0) {
-            int totalGroups = this.pung.size(); // Number of groups
+
+        List<Group> pungsAndKongs = new ArrayList<>();
+        if (this.pung != null)
+            pungsAndKongs.addAll(this.pung);
+        if (this.kong != null)
+            pungsAndKongs.addAll(this.kong);
+        if (pungsAndKongs.size() > 0) {
+            int totalGroups = pungsAndKongs.size(); // Number of groups
 
             for (int i = totalGroups - 1; i >= 0; i--) {
-                Group group = this.pung.get(i);
+                Group group = pungsAndKongs.get(i);
                 int totalTilesInGroup = group.toList().size(); // Number of tiles in group
 
                 // Calculate the starting x-position of the group

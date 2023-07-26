@@ -49,10 +49,24 @@ public class Player {
         return status;
     }
 
-    public boolean getChouPungKong() {
+    public boolean isPlaying() {
+        return this.status.contains(PlayerStatusEnum.PLAYING);
+    }
+
+    public boolean isWaiting() {
+        return this.status.contains(PlayerStatusEnum.WAITING);
+    }
+
+    public boolean containsKong() {
+        return this.status.contains(PlayerStatusEnum.NORMAL_KONG)
+                || this.status.contains(PlayerStatusEnum.HIDDEN_KONG)
+                || this.status.contains(PlayerStatusEnum.ADD_KONG);
+    }
+
+    public boolean containsChouPungKong() {
         return this.status.contains(PlayerStatusEnum.CHOW)
                 || this.status.contains(PlayerStatusEnum.PUNG)
-                || this.status.contains(PlayerStatusEnum.KONG);
+                || this.containsKong();
     }
 
     //Status Setters
@@ -74,8 +88,16 @@ public class Player {
         this.status.add(PlayerStatusEnum.HU);
     }
 
-    public void setKongStatus() {
-        this.status.add(PlayerStatusEnum.KONG);
+    public void setNormalKongStatus() {
+        this.status.add(PlayerStatusEnum.NORMAL_KONG);
+    }
+
+    public void setAddKongStatus() {
+        this.status.add(PlayerStatusEnum.ADD_KONG);
+    }
+
+    public void setHiddenKongStatus() {
+        this.status.add(PlayerStatusEnum.HIDDEN_KONG);
     }
 
     public void setPungStatus() {
@@ -87,7 +109,9 @@ public class Player {
     }
 
     public void clearKongStatus() {
-        this.status.remove(PlayerStatusEnum.KONG);
+        this.status.remove(PlayerStatusEnum.NORMAL_KONG);
+        this.status.remove(PlayerStatusEnum.ADD_KONG);
+        this.status.remove(PlayerStatusEnum.HIDDEN_KONG);
     }
 
     public void clearPungStatus() {
@@ -99,9 +123,9 @@ public class Player {
     }
 
     public void clearStatus() {
-        this.status.remove(PlayerStatusEnum.CHOW);
-        this.status.remove(PlayerStatusEnum.PUNG);
-        this.status.remove(PlayerStatusEnum.KONG);
+        this.clearChowStatus();
+        this.clearKongStatus();
+        this.clearPungStatus();
     }
 
     public void addTile(Tile tile) {
