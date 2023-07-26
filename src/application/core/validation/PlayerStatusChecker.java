@@ -11,7 +11,7 @@ import java.util.*;
 public class PlayerStatusChecker {
     private Player player;
     private List<Tile> tiles;
-    private Map<String, List<Tile>> categorizedTiles;
+    private final Map<String, List<Tile>> categorizedTiles;
     private Set<Group> pair;
     private Set<Group> sequence;
     private Set<Group> triple;

@@ -12,12 +12,11 @@ public class PlayerTableTiles extends Tiles {
 
     @Override
     public void updatePosition() {
-        for (int i = 0; i < this.tiles.size(); i++) {
-            Tile tile = this.tiles.get(i);
-            tile.x = (int) (Config.PLAYER_TABLE_X + Config.TABLE_TILE_PADDING * tile.getIndex() + Config.TABLE_TILE_WIDTH * tile.getIndex());
+        for (Tile tile : this.tiles) {
+            tile.x = Config.PLAYER_TABLE_X + Config.TABLE_TILE_PADDING * tile.getIndex() + Config.TABLE_TILE_WIDTH * tile.getIndex();
             tile.y = Config.PLAYER_TABLE_Y;
-            tile.width = (int) (Config.TABLE_TILE_WIDTH);
-            tile.height = (int) (Config.TABLE_TILE_HEIGHT);
+            tile.width = Config.TABLE_TILE_WIDTH;
+            tile.height = Config.TABLE_TILE_HEIGHT;
         }
     }
 
@@ -27,6 +26,5 @@ public class PlayerTableTiles extends Tiles {
         this.updateIndex();
         this.updatePosition();
     }
-
 
 }

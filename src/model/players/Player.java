@@ -8,7 +8,7 @@ import utils.TileUtils;
 
 import java.util.*;
 
-public class Player{
+public class Player {
     protected Set<PlayerStatusEnum> status;
     protected final String name;
     protected HandTiles hand;
@@ -49,10 +49,10 @@ public class Player{
         return status;
     }
 
-    public boolean getSkippable() {
+    public boolean getChouPungKong() {
         return this.status.contains(PlayerStatusEnum.CHOW)
-        || this.status.contains(PlayerStatusEnum.PUNG)
-        || this.status.contains(PlayerStatusEnum.KONG);
+                || this.status.contains(PlayerStatusEnum.PUNG)
+                || this.status.contains(PlayerStatusEnum.KONG);
     }
 
     //Status Setters
@@ -84,6 +84,18 @@ public class Player{
 
     public void setChowStatus() {
         this.status.add(PlayerStatusEnum.CHOW);
+    }
+
+    public void clearKongStatus() {
+        this.status.remove(PlayerStatusEnum.KONG);
+    }
+
+    public void clearPungStatus() {
+        this.status.remove(PlayerStatusEnum.PUNG);
+    }
+
+    public void clearChowStatus() {
+        this.status.remove(PlayerStatusEnum.CHOW);
     }
 
     public void clearStatus() {

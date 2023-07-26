@@ -63,8 +63,8 @@ public class HandTiles extends Tiles {
         this.pung.add(new Group(pung, GroupEnum.PUNG, 0));
         this.tiles.remove(tile);
         this.tiles.remove(tile);
-        this.tiles.remove(tile);
         this.sort();
+        System.out.println(this.pung);
     }
 
     public List<Group> getKong() {
@@ -81,12 +81,11 @@ public class HandTiles extends Tiles {
 
     @Override
     public void updatePosition() {
-        for (int i = 0; i < this.tiles.size(); i++) {
-            Tile tile = this.tiles.get(i);
+        for (Tile tile : this.tiles) {
             tile.x = Config.PLAYER_HAND_LEFT_INDENT + Config.PLAYER_HAND_TILE_PADDING * tile.getIndex() + Config.TILE_WIDTH * tile.getIndex();
             tile.y = Config.PLAYER_HAND_TOP_INDENT;
             tile.width = Config.TILE_WIDTH;
-            tile.height = (int) (Config.TILE_HEIGHT);
+            tile.height = Config.TILE_HEIGHT;
         }
 
         if (this.newTile != null) {
@@ -96,24 +95,28 @@ public class HandTiles extends Tiles {
                     + Config.FOURTEENTH_TILE_INDENT;
             this.newTile.y = Config.PLAYER_HAND_TOP_INDENT;
             this.newTile.width = Config.TILE_WIDTH;
-            this.newTile.height = (int) (Config.TILE_HEIGHT);
+            this.newTile.height = Config.TILE_HEIGHT;
         }
 
-        if (this.pung != null) {
-            for (int i = 0; i < this.pung.size(); i++) {
+        if (this.pung != null && this.pung.size() > 0) {
+            int totalGroups = this.pung.size(); // Number of groups
+
+            for (int i = totalGroups - 1; i >= 0; i--) {
                 Group group = this.pung.get(i);
-                for (int j = 0; j < group.toList().size(); j++) {
+                int totalTilesInGroup = group.toList().size(); // Number of tiles in group
+
+                // Calculate the starting x-position of the group
+                int groupX = Config.PLAYER_TABLE_X + Config.PLAYER_TABLE_WIDTH
+                        - (Config.TABLE_TILE_WIDTH * totalTilesInGroup + Config.TABLE_TILE_PADDING) * (totalGroups - i);
+
+                for (int j = 0; j < totalTilesInGroup; j++) {
                     Tile tile = group.toList().get(j);
-                    tile.x = Config.PLAYER_HAND_LEFT_INDENT
-                            + Config.PLAYER_HAND_TILE_PADDING
-                            + Config.TILE_WIDTH
-                            + Config.FOURTEENTH_TILE_INDENT
-                            + Config.TILE_WIDTH
-                            + Config.PLAYER_HAND_TILE_PADDING
-                            + Config.TILE_WIDTH * j;
-                    tile.y = Config.PLAYER_HAND_TOP_INDENT;
-                    tile.width = Config.TILE_WIDTH;
-                    tile.height = (int) (Config.TILE_HEIGHT);
+
+                    // Calculate the x-position of the tile within the group
+                    tile.x = groupX + Config.TABLE_TILE_WIDTH * j;
+                    tile.y = Config.PLAYER_TABLE_Y;
+                    tile.width = Config.TABLE_TILE_WIDTH;
+                    tile.height = Config.TABLE_TILE_HEIGHT;
                 }
             }
         }

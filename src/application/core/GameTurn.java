@@ -23,11 +23,11 @@ public class GameTurn {
         }
     }
 
-    public int next() {
+    public Player next() {
         Player player = this.turns.remove(0);
         this.turns.add(player);
         this.round++;
-        return this.original.indexOf(player);
+        return player;
     }
 
     public Player peek() {
@@ -36,6 +36,12 @@ public class GameTurn {
 
     public List<Player> peek3() {
         return new ArrayList<>(this.turns.subList(0, 3));
+    }
+
+    public Player getPlayerAfter(Player player) {
+        int index = this.original.indexOf(player);
+        int nextIndex = (index + 1) % this.original.size();
+        return this.original.get(nextIndex);
     }
 
 

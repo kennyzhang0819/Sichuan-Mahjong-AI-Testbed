@@ -3,8 +3,10 @@ package application.gameframe;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+
 public class KeyHandler implements KeyListener {
     public boolean hPressed, cPressed, pPressed, kPressed, sPressed;
+    public boolean pProcessed = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -22,6 +24,7 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_P) {
             this.pPressed = true;
+            this.pProcessed = false;
         }
         if (code == KeyEvent.VK_K) {
             this.kPressed = true;
