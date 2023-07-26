@@ -1,4 +1,4 @@
-import application.GamePanel;
+import application.gameframe.GamePanel;
 import config.Config;
 
 import javax.swing.*;

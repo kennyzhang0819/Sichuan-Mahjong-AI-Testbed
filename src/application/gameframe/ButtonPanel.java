@@ -1,4 +1,4 @@
-package application;
+package application.gameframe;
 
 import javax.swing.*;
 

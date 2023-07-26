@@ -1,28 +1,16 @@
 package model.basic;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 public class Tile extends Entity {
     private int index;
     private TileTypeEnum type;
     private int number;
-    private BufferedImage image;
 
     public Tile(TileTypeEnum type, int number) {
         super(0,0,0,0);
         this.type = type;
         this.number = number;
-        try {
-            String path = "C:\\Users\\DELL\\Desktop\\Mahjong\\MahjongGame\\Mahjong-Game-Java\\img\\" +
-                    type.getEnglish() + "\\0" + number + ".png";
-            this.image = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public TileTypeEnum getType() {
@@ -31,10 +19,6 @@ public class Tile extends Entity {
 
     public int getNumber() {
         return number;
-    }
-
-    public BufferedImage getImage() {
-        return image;
     }
 
     public int getIndex() {

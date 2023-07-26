@@ -1,9 +1,13 @@
-package application;
+package application.gameframe;
 
+import config.Config;
 import model.basic.Entity;
 import model.basic.Tile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class Drawer {
@@ -11,22 +15,28 @@ public class Drawer {
     private final Graphics2D g2;
     private final int width;
     private final int height;
+    private final TileImageLoader imageLoader;
 
-    public Drawer(Graphics2D g2, int width, int height) {
+    public Drawer(Graphics2D g2, int width, int height, TileImageLoader imageLoader) {
         this.g2 = g2;
         this.width = width;
         this.height = height;
+        this.imageLoader = imageLoader;
     }
 
     public void drawTile(Tile tile) {
-        Image image = tile.getImage();
-        Image scaled = image.getScaledInstance(tile.width, tile.height, Image.SCALE_SMOOTH);
-
+        Image image = null;
+        if (tile.width == Config.TILE_WIDTH) {
+            image = imageLoader.getImage(tile);
+        } else if (tile.width == Config.TABLE_TILE_WIDTH) {
+            image = imageLoader.getTableImage(tile);
+        }
+        assert image != null;
         g2.setColor(Color.WHITE);
         g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
-//        g2.drawString(String.valueOf(tile.getIndex() + 1),(int) tile.x,(int) tile.y + tile.height + 20);
-        g2.drawImage(scaled,(int) tile.x,(int) tile.y, null);
+        g2.drawImage(image, (int) tile.x, (int) tile.y, null);
     }
+
 
     public void drawBackground() {
         Color baseGreen = new Color(30, 100, 60);

@@ -3,7 +3,7 @@ package model.tiles;
 import config.Config;
 import model.basic.Tile;
 
-public class AI2TableTiles extends PlayerTableTiles {
+public class AI2TableTiles extends Tiles {
 
     public AI2TableTiles() {
         super();
@@ -25,5 +25,12 @@ public class AI2TableTiles extends PlayerTableTiles {
                 currentTile = 0;
             }
         }
+    }
+
+    @Override
+    public void add(Tile tile) {
+        this.tiles.add(tile);
+        this.updateIndex();
+        this.updatePosition();
     }
 }

@@ -34,6 +34,10 @@ public class GameTurn {
         return this.turns.get(0);
     }
 
+    public List<Player> peek3() {
+        return new ArrayList<>(this.turns.subList(0, 3));
+    }
+
 
     public int getRound() {
         return round;

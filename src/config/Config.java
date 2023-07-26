@@ -16,7 +16,7 @@ public class Config {
     //GameTile Sizes
     private static final double TILE_HEIGHT_MULTIPLIER = 1.4;
     public static final int TILE_WIDTH = TILE_SIZE;
-    public static final double TILE_HEIGHT = TILE_WIDTH * TILE_HEIGHT_MULTIPLIER;
+    public static final int TILE_HEIGHT = (int) (TILE_WIDTH * TILE_HEIGHT_MULTIPLIER);
 
     //Specific Tile Sizes
 
@@ -33,9 +33,9 @@ public class Config {
 
     //Table Commons
     private static final double SHRINK_MULTIPLIER = 0.65;
-    public static final double TABLE_TILE_PADDING = PLAYER_HAND_TILE_PADDING * SHRINK_MULTIPLIER;
-    public static final double TABLE_TILE_WIDTH = TILE_WIDTH * SHRINK_MULTIPLIER;
-    public static final double TABLE_TILE_HEIGHT = TILE_HEIGHT * SHRINK_MULTIPLIER;
+    public static final int TABLE_TILE_PADDING = (int) (PLAYER_HAND_TILE_PADDING * SHRINK_MULTIPLIER);
+    public static final int TABLE_TILE_WIDTH = (int) (TILE_WIDTH * SHRINK_MULTIPLIER);
+    public static final int TABLE_TILE_HEIGHT = (int) (TILE_HEIGHT * SHRINK_MULTIPLIER);
 
     //PlayerTable
     public static final int PLAYER_TABLE_X = 200;

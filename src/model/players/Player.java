@@ -50,10 +50,9 @@ public class Player{
     }
 
     public boolean getSkippable() {
-        return this.status.contains(PlayerStatusEnum.WAITING)
-                && (this.status.contains(PlayerStatusEnum.CHOW)
+        return this.status.contains(PlayerStatusEnum.CHOW)
         || this.status.contains(PlayerStatusEnum.PUNG)
-        || this.status.contains(PlayerStatusEnum.KONG));
+        || this.status.contains(PlayerStatusEnum.KONG);
     }
 
     //Status Setters

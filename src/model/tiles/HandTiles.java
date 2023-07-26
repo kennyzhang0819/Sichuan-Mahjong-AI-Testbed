@@ -55,13 +55,15 @@ public class HandTiles extends Tiles {
     }
 
     public void addPung(Tile tile) {
-        ArrayList<Tile> pung = new ArrayList<Tile>() {{
+        List<Tile> pung = new ArrayList<Tile>() {{
             add(tile);
             add(tile);
             add(tile);
         }};
         this.pung.add(new Group(pung, GroupEnum.PUNG, 0));
-        this.tiles.removeAll(Collections.singletonList(tile));
+        this.tiles.remove(tile);
+        this.tiles.remove(tile);
+        this.tiles.remove(tile);
         this.sort();
     }
 

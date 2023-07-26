@@ -17,21 +17,25 @@ public class PlayerStatusChecker {
     private Set<Group> triple;
     private Set<Group> pung;
     private Set<Group> kong;
+    private PungKongChecker pungKongChecker;
 
     public PlayerStatusChecker(Player player, Tile newTile) {
-        this.player = player;
-        List<Tile> tiles = player.getHand().toList();
-        tiles.add(newTile);
-        this.setTiles(tiles);
-    }
-
-    private void setTiles(List<Tile> tiles) {
         this.pair = new HashSet<>();
         this.sequence = new HashSet<>();
         this.triple = new HashSet<>();
         this.pung = new HashSet<>();
         this.kong = new HashSet<>();
         this.categorizedTiles = new HashMap<>();
+        this.player = player;
+        this.pungKongChecker = new PungKongChecker(player, newTile);
+        List<Tile> tiles = player.getHand().toList();
+        tiles.add(newTile);
+        this.setTiles(tiles);
+    }
+
+    private void setTiles(List<Tile> tiles) {
+        this.pung.addAll(player.getHand().getPung());
+        this.kong.addAll(player.getHand().getKong());
         this.tiles = new ArrayList<>(tiles);
         this.tiles.sort(Comparator.comparing(Tile::getType).thenComparing(Tile::getNumber));
         for (Tile tile : this.tiles) {
@@ -60,6 +64,7 @@ public class PlayerStatusChecker {
         }
         if (this.checkPung()) {
             this.player.setPungStatus();
+            System.out.println(this.player.getName() + " has pung status");
         }
     }
 
@@ -75,11 +80,11 @@ public class PlayerStatusChecker {
     }
 
     private boolean checkPung() {
-        return this.pung.size() > 0;
+        return this.pungKongChecker.canPung();
     }
 
     private boolean checkKong() {
-        return this.kong.size() > 0;
+        return this.pungKongChecker.canKong();
     }
 
 

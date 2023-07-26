@@ -70,7 +70,7 @@ public class Game {
         this.gameTurn = new GameTurn(players, player);
     }
 
-    public GameState next() {
+    public void next() {
        this.turnPlayer = this.players.get(gameTurn.next());
         if (turnPlayer.getStatus().contains(PlayerStatusEnum.HU)) {
             this.ended = true;
@@ -82,23 +82,27 @@ public class Game {
         }
         if (turnPlayer == this.player) {
             log.addMessage("directing to " + turnPlayer.getName() + " for action");
-            return this.getGameState();
         } else {
             turnPlayer.setPlayingStatus();
             turnPlayer.action();
-            List<Player> next3Players = new ArrayList<Player>() {{
-                for (int i = 0; i < 3; i++) {
-                    add(gameTurn.peek());
-                }
-            }};
-            for (Player player : next3Players) {
-                new PlayerStatusChecker(player, turnPlayer.getHand().getLast());
-            }
-            log.addMessage(turnPlayer.getName() + " played");
-            turnPlayer.setWaitingStatus();
-            gameTurn.peek().setPlayingStatus();
-            return this.getGameState();
+            this.processAIPlayed();
         }
+    }
+
+    public void processAIPlayed() {
+        List<Player> next3Players = this.gameTurn.peek3();
+        for (Player player : next3Players) {
+            new PlayerStatusChecker(player, turnPlayer.getTable().getLast());
+        }
+        log.addMessage(turnPlayer.getName() + " played");
+        turnPlayer.setWaitingStatus();
+        gameTurn.peek().setPlayingStatus();
+    }
+
+    public GameState processPlayerPlayed() {
+        this.processAIPlayed();
+        this.leftOverRounds = 4;
+        return this.playLeftOverRounds();
     }
 
     public GameState processPung(Player player) {
@@ -112,17 +116,10 @@ public class Game {
         return this.playLeftOverRounds();
     }
 
-    public GameState processPlayerPlayed() {
-        player.setWaitingStatus();
-        this.leftOverRounds = 5;
-        return this.playLeftOverRounds();
-    }
-
     public GameState playLeftOverRounds() {
-        for (int i = 0; i < this.leftOverRounds; i++) {
+        for (int i = 0; i < this.leftOverRounds;) {
             this.next();
             leftOverRounds--;
-            System.out.println(leftOverRounds);
             if (this.player.getStatus().contains(PlayerStatusEnum.CHOW) ||
                     this.player.getStatus().contains(PlayerStatusEnum.PUNG) ||
                     this.player.getStatus().contains(PlayerStatusEnum.KONG)) {

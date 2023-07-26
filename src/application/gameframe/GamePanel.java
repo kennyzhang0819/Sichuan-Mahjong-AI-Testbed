@@ -1,4 +1,4 @@
-package application;
+package application.gameframe;
 
 import application.core.Game;
 import model.GameState;
@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Entity ai1Table;
     private Entity ai2Table;
     private Entity ai3Table;
+    private final TileImageLoader imageLoader = new TileImageLoader();
 
 
     public GamePanel() {
@@ -40,7 +41,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         this.game = new Game();
         this.player = this.game.getPlayers().get(0);
-        this.gameState = this.game.next();
+        this.game.next();
+        this.gameState = this.game.getGameState();
         this.initBoxes();
         addKeyListener(keyHandler);
         setFocusable(true);
@@ -48,7 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (hoveredTile != null && player.getStatus().contains(PlayerStatusEnum.PLAYING)) {
+                if (hoveredTile != null && player.getStatus().contains(PlayerStatusEnum.PLAYING) &&
+                        !player.getSkippable()) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
                     gameState = game.processPlayerPlayed();
@@ -120,21 +123,25 @@ public class GamePanel extends JPanel implements Runnable {
             System.out.println(player.getName() + " wins!");
         }
         if (keyHandler.pPressed && player.getStatus().contains(PlayerStatusEnum.PUNG)) {
-            System.out.println("Pung!!!!!!!!!!!!!!!!!!!");
             this.gameState = this.game.processPung(player);
         }
-        if (keyHandler.sPressed && player.getSkippable()) {
-            System.out.println("Skip!!!!!!!!!!!!!!!!!!!");
+        if (keyHandler.sPressed
+                && player.getSkippable()) {
             this.gameState = this.game.processPlayerSkipped();
         }
-        System.out.println(player.getStatus());
+//        List<Player> allPlayers = this.gameState.getAllPlayers();
+//        System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getStatus() +
+//                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getStatus() +
+//        		" | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getStatus() +
+//        		" | " + allPlayers.get(3).getName() + " : " + allPlayers.get(3).getStatus());
+
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        Drawer drawer = new Drawer(g2, getWidth(), getHeight());
+        Drawer drawer = new Drawer(g2, getWidth(), getHeight(), imageLoader);
         drawer.drawBackground();
         drawer.drawLogs(this.game.getLog().getLastXMessages(39));
         drawer.drawInstructions();
@@ -148,4 +155,5 @@ public class GamePanel extends JPanel implements Runnable {
         }
         g2.dispose();
     }
+
 }
