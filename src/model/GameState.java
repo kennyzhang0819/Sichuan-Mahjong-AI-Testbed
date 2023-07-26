@@ -22,10 +22,11 @@ public class GameState {
     private final List<Tile> ai2Table;
     private final List<Tile> ai3Table;
     private final List<Tile> tilesToDraw;
+    private final boolean ongoingPung;
 
     public GameState(Player turnPlayer, List<Player> allPlayers, int round, List<Tile> playerHand, List<Tile> playerKong,
                      List<Tile> playerPung, Tile playerNewTile, List<Tile> playerTable,
-                     List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table) {
+                     List<Tile> ai1Table, List<Tile> ai2Table, List<Tile> ai3Table, boolean ongoingPung) {
         this.turnPlayer = turnPlayer;
         this.allPlayers = allPlayers;
         this.round = round;
@@ -37,6 +38,8 @@ public class GameState {
         this.ai1Table = ai1Table;
         this.ai2Table = ai2Table;
         this.ai3Table = ai3Table;
+        this.ongoingPung = ongoingPung;
+
         this.tilesToDraw = Stream.of(playerHand, playerKong, playerPung, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
         if (this.playerNewTile != null) {
             this.tilesToDraw.add(this.playerNewTile);
@@ -57,7 +60,9 @@ public class GameState {
 
     public List<Tile> getPlayerHand() {
         List<Tile> handWithNewTile = new ArrayList<>(playerHand);
-        handWithNewTile.add(playerNewTile);
+        if (playerNewTile != null) {
+            handWithNewTile.add(playerNewTile);
+        }
         return handWithNewTile;
     }
 
@@ -91,6 +96,10 @@ public class GameState {
 
     public List<Tile> getTilesToDraw() {
         return tilesToDraw;
+    }
+
+    public boolean isOngoingPung() {
+        return ongoingPung;
     }
 
     @Override

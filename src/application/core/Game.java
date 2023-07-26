@@ -2,10 +2,10 @@ package application.core;
 
 import application.core.validation.PlayerStatusChecker;
 import model.GameState;
+import model.basic.Tile;
 import model.basic.TileTypeEnum;
 import model.log.Log;
 import model.players.*;
-import model.basic.Tile;
 import model.tiles.HandTiles;
 
 import java.util.*;
@@ -20,6 +20,7 @@ public class Game {
     private GameTurn gameTurn;
     private final Log log;
     private int leftOverRounds;
+    private boolean ongoingPung;
 
     public Game() {
         this.ended = false;
@@ -88,26 +89,27 @@ public class Game {
         log.addMessage(turnPlayer.getName() + "'s turn");
         if (gameTurn.getRound() != 1) {
             turnPlayer.addTile(this.getNextTile());
-            new PlayerStatusChecker(turnPlayer, turnPlayer.getHand().getNewTile());
         }
+        new PlayerStatusChecker(turnPlayer, turnPlayer.getHand().getNewTile());
         if (turnPlayer == this.player) {
             log.addMessage("directing to " + turnPlayer.getName() + " for action");
         } else {
             turnPlayer.setPlayingStatus();
             turnPlayer.action();
-            this.processAIPlayed();
+            this.processPlayed();
         }
     }
 
-    private void processAIPlayed() {
+    private void processPlayed() {
+        this.ongoingPung = false;
         List<Player> next3Players = this.gameTurn.peek3();
         for (Player player : next3Players) {
-            new PlayerStatusChecker(player, turnPlayer.getTable().getLast());
+            new PlayerStatusChecker(player, this.turnPlayer.getTable().getLast());
         }
-        log.addMessage(turnPlayer.getName() + " played");
-        turnPlayer.setWaitingStatus();
+        log.addMessage(this.turnPlayer.getName() + " played");
+        this.turnPlayer.setWaitingStatus();
         if (!this.player.getChouPungKong()) {
-            gameTurn.getPlayerAfter(turnPlayer).setPlayingStatus();
+            this.gameTurn.getPlayerAfter(this.turnPlayer).setPlayingStatus();
         }
     }
 
@@ -125,20 +127,21 @@ public class Game {
 
 
     //PUBLIC METHODS
-    public GameState processPlayerPlayed() {
-        this.processAIPlayed();
+    public void processPlayerPlayed() {
+        this.processPlayed();
         this.leftOverRounds = 4;
-        return this.playLeftOverRounds();
+        this.playLeftOverRounds();
     }
 
     public GameState processPung(Player player) {
         player.getHand().addPung(this.turnPlayer.getTable().getLast());
         this.turnPlayer.getTable().removeLast();
         this.gameTurn = new GameTurn(this.players, this.player);
+        this.turnPlayer = gameTurn.next();
         player.setPlayingStatus();
-        player.clearPungStatus();
+        player.clearStatus();
+        this.ongoingPung = true;
         log.addMessage(player.getName() + " pung, now " + player.getName() + " will play 1 tile");
-
         return this.getGameState();
     }
 
@@ -171,7 +174,7 @@ public class Game {
         Tile newTile = playerHand.getNewTile();
 
         return new GameState(this.turnPlayer, this.players, gameTurn.getRound(), playerHandList,
-                kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table);
+                kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table, this.ongoingPung);
     }
 
 

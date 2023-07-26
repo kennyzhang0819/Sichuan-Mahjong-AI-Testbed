@@ -19,17 +19,6 @@ public class GameTurnTest  {
         }};
 
         GameTurn gameTurn = new GameTurn(players, players.get(0));
-        System.out.println("first peek: " + gameTurn.peek());
-        System.out.println(gameTurn.next());
-        System.out.println("peek after next: " + gameTurn.peek());
-        System.out.println("peek3 after next: " + gameTurn.peek3());
-        System.out.println("player after " + players.get(0).getName() + " is " + gameTurn.getPlayerAfter(players.get(0)).getName());
-        System.out.println("player after " + players.get(3).getName() + " is " + gameTurn.getPlayerAfter(players.get(3)).getName());
-
-
-        gameTurn = new GameTurn(players, players.get(2));
-        System.out.println("first peek: " + gameTurn.peek3());
-        System.out.println("player after " + players.get(0).getName() + " is " + gameTurn.getPlayerAfter(players.get(0)).getName());
-        System.out.println("player after " + players.get(3).getName() + " is " + gameTurn.getPlayerAfter(players.get(3)).getName());
+        System.out.println(gameTurn.getPlayerAfter(players.get(0)));
     }
 }

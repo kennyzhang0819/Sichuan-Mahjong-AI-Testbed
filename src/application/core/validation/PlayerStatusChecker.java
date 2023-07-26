@@ -61,10 +61,11 @@ public class PlayerStatusChecker {
         }
         if (this.checkKong()) {
             this.player.setKongStatus();
+            System.out.println("setted kong status to " + this.player.getName());
         }
         if (this.checkPung()) {
             this.player.setPungStatus();
-            System.out.println(this.player.getName() + " has pung status");
+            System.out.println("setted pung status to " + this.player.getName());
         }
     }
 

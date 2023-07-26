@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,13 +57,10 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (!player.getStatus().contains(PlayerStatusEnum.PLAYING) &&
-                        player.getChouPungKong()) {
-                    return;
-                }
-                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), new ArrayList<Tile>() {{
+                List<Tile> hand = new ArrayList<Tile>() {{
                     this.addAll(gameState.getPlayerHand());
-                }});
+                }};
+                Tile newHoveredTile = getTileAt(e.getX(), e.getY(), hand);
                 if (newHoveredTile != hoveredTile) {
                     if (hoveredTile != null) {
                         moveTileDown(hoveredTile);
@@ -92,6 +90,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if (keyHandler.pPressed && !keyHandler.pProcessed
                 && player.getStatus().contains(PlayerStatusEnum.PUNG)) {
+            System.out.println("P pressed, going to process Pung now");
             this.gameState = this.game.processPung(player);
             keyHandler.pProcessed = true;
         }
@@ -100,11 +99,16 @@ public class GamePanel extends JPanel implements Runnable {
             this.game.processPlayerSkipped();
             this.gameState = this.game.getGameState();
         }
+
         List<Player> allPlayers = this.gameState.getAllPlayers();
-        System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getStatus() +
-                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getStatus() +
-                " | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getStatus() +
-                " | " + allPlayers.get(3).getName() + " : " + allPlayers.get(3).getStatus());
+//                System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getHand().toList().size()  +
+//                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getHand().toList().size()  +
+//                " | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getHand().toList().size()  +
+//                " | " + allPlayers.get(3).getName() + " : " + allPlayers.get(3).getHand().toList().size() );
+//        System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getStatus() +
+//                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getStatus() +
+//                " | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getStatus() +
+//                " | " + allPlayers.get(3).getName() + " : " + allPlayers.get(3).getStatus());
     }
 
 

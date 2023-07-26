@@ -20,7 +20,7 @@ public class HandTiles extends Tiles {
     @Override
     public void add(Tile tile) {
         if (this.newTile != null) {
-            this.tiles.add(this.newTile);
+            super.add(this.newTile);
         }
         this.newTile = tile;
         this.sort();
@@ -39,7 +39,15 @@ public class HandTiles extends Tiles {
                 break;
             }
         }
+        this.mergeNewWithHand();
         this.sort();
+    }
+
+    private void mergeNewWithHand() {
+        if (this.newTile != null) {
+            super.add(this.newTile);
+            this.newTile = null;
+        }
     }
 
     public void addKong(Tile tile) {
@@ -56,9 +64,9 @@ public class HandTiles extends Tiles {
 
     public void addPung(Tile tile) {
         List<Tile> pung = new ArrayList<Tile>() {{
-            add(tile);
-            add(tile);
-            add(tile);
+            add(new Tile(tile.getType(), tile.getNumber()));
+            add(new Tile(tile.getType(), tile.getNumber()));
+            add(new Tile(tile.getType(), tile.getNumber()));
         }};
         this.pung.add(new Group(pung, GroupEnum.PUNG, 0));
         this.tiles.remove(tile);

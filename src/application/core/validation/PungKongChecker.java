@@ -12,6 +12,11 @@ public class PungKongChecker {
     private final Tile newTile;
 
     public PungKongChecker(Player player, Tile newTile) {
+//        if (player.getName() == "Player") {
+//            System.out.println(player + " and " + newTile.toString());
+//        }
+
+
         this.player = player;
         this.playerHand = player.getHand().toList();
         this.newTile = newTile;
@@ -24,7 +29,7 @@ public class PungKongChecker {
 
     public boolean canKong() {
         int tileCount = Collections.frequency(playerHand, newTile);
-        return tileCount >= 3 || this.player.getHand().getPung().size() > 0; // if there is a triple, can Kong
+        return tileCount >= 3; // if there is a triple, can Kong
     }
 
 }
