@@ -27,15 +27,17 @@ public class PlayerStatusChecker {
         this.categorizedTiles = new HashMap<>();
         this.player = player;
         this.pungKongChecker = new PungKongChecker(player, newTile);
+
         List<Tile> tiles = player.getHand().toList();
+        assert newTile != null;
         tiles.add(newTile);
-        this.setTiles(tiles);
+        player.getHand().getKong().forEach(kong -> tiles.addAll(kong.toList()));
+        player.getHand().getPung().forEach(pung -> tiles.addAll(pung.toList()));
+        this.tiles = new ArrayList<>(tiles);
+        this.setTiles();
     }
 
-    private void setTiles(List<Tile> tiles) {
-        this.pung.addAll(player.getHand().getPung());
-        this.kong.addAll(player.getHand().getKong());
-        this.tiles = new ArrayList<>(tiles);
+    private void setTiles() {
         this.tiles.sort(Comparator.comparing(Tile::getType).thenComparing(Tile::getNumber));
         for (Tile tile : this.tiles) {
             this.categorizedTiles.computeIfAbsent(tile.getType().getEnglish(), k -> new ArrayList<>()).add(tile);
@@ -51,8 +53,10 @@ public class PlayerStatusChecker {
         if (this.checkHu()) {
             if (this.player.isPlaying()) {
                 this.player.setHuStatus();
+                System.out.println("setted hu status to " + this.player.getName());
             }
             this.player.setChowStatus();
+            System.out.println("setted chow status to " + this.player.getName());
         }
         if (this.pungKongChecker.canPung()) {
             this.player.setPungStatus();

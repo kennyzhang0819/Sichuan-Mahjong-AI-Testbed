@@ -8,6 +8,9 @@ public class KeyHandler implements KeyListener {
     public boolean hPressed, cPressed, pPressed, kPressed, sPressed;
     public boolean pProcessed = false;
     public boolean kProcessed = false;
+    public boolean cProcessed = false;
+    public boolean hProcessed = false;
+    public boolean sProcessed = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -19,9 +22,11 @@ public class KeyHandler implements KeyListener {
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_H) {
             this.hPressed = true;
+            this.hProcessed = false;
         }
         if (code == KeyEvent.VK_C) {
             this.cPressed = true;
+            this.cProcessed = false;
         }
         if (code == KeyEvent.VK_P) {
             this.pPressed = true;
@@ -33,6 +38,7 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_S) {
             this.sPressed = true;
+            this.sProcessed = false;
         }
     }
 

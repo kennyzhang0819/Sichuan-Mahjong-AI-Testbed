@@ -38,9 +38,12 @@ public class PungKongChecker {
     }
 
     public boolean canHiddenKong() {
-        // Checks if player has 4 identical tiles in hand
-        int tileCount = Collections.frequency(playerHand, newTile);
-        return tileCount == 4; // If there are 4 identical tiles, can Hidden Kong
+        for (Tile tile : this.playerHand) {
+            if (Collections.frequency(playerHand, tile) == 4) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

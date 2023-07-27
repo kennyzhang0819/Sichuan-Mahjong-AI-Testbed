@@ -16,7 +16,7 @@ public class GameTurnTest  {
             add(new AI3("ai3", new ArrayList<>()));
         }};
 
-        GameTurn gameTurn = new GameTurn(players, players.get(0));
-        System.out.println(gameTurn.getPlayerAfter(players.get(0)));
+        GameTurn gameTurn = new GameTurn(players, players.get(1));
+        System.out.println(gameTurn.getRoundsUntilPlayer());
     }
 }

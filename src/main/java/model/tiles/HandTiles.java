@@ -82,11 +82,16 @@ public class HandTiles extends Tiles {
         this.sort();
     }
 
-    public void addHiddenKong(Tile tile) {
-        List<Tile> kong = this.generateNewKong(tile);
-        this.kong.add(new Group(kong, GroupEnum.HIDDEN_KONG, 0));
-        this.tiles.removeAll(Collections.singletonList(tile));
-        this.sort();
+    public void addHiddenKong() {
+        for (Tile tile : this.tiles) {
+            if (Collections.frequency(this.tiles, tile) == 4) {
+                List<Tile> kong = this.generateNewKong(tile);
+                this.kong.add(new Group(kong, GroupEnum.HIDDEN_KONG, 0));
+                this.tiles.removeAll(Collections.singletonList(tile));
+                this.sort();
+                break;
+            }
+        }
     }
     private List<Tile> generateNewKong(Tile tile) {
         return new ArrayList<Tile>() {{

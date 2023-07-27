@@ -48,4 +48,12 @@ public class GameTurn {
     public int getRound() {
         return round;
     }
+
+    public int getRoundsUntilPlayer() {
+        Player player = this.original.get(0);
+
+        return this.turns.indexOf(player) + 1;
+    }
+
+
 }

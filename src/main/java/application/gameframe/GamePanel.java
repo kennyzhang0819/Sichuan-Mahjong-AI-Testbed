@@ -84,8 +84,10 @@ public class GamePanel extends JPanel implements Runnable {
         if (this.game.isOver()) {
             this.gameThread = null;
         }
-        if (keyHandler.hPressed && player.getStatus().contains(PlayerStatusEnum.HU)) {
-            System.out.println(player.getName() + " wins!");
+        if (keyHandler.hPressed && !keyHandler.hProcessed
+                && player.getStatus().contains(PlayerStatusEnum.HU)) {
+            System.out.println("the player wins!");
+            keyHandler.hProcessed = true;
         }
         if (keyHandler.pPressed && !keyHandler.pProcessed
                 && player.getStatus().contains(PlayerStatusEnum.PUNG)) {

@@ -8,7 +8,7 @@ import utils.TileUtils;
 import java.util.List;
 
 public class AI1 extends Player {
-//    private final Strategy strategy = new DummyAIStrategy();
+//    private final Strategy strategy = new DummyAI();
     private final AI1TableTiles aiTable;
 
     public AI1(String name, List<Tile> hand) {
