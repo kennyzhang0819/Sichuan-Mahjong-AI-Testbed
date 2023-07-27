@@ -175,7 +175,7 @@ public class Game {
     public void processPung(Player player) {
         player.getHand().addPung(this.turnPlayer.getTable().getLast());
         this.turnPlayer.getTable().removeLast();
-        this.gameTurn = new GameTurn(this.players, this.player);
+        this.gameTurn = new GameTurn(this.players, player);
         this.turnPlayer = gameTurn.next();
         player.setPlayingStatus();
         player.clearStatus();
