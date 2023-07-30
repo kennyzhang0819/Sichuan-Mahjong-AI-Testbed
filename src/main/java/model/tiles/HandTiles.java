@@ -69,14 +69,14 @@ public class HandTiles extends Tiles {
         this.sort();
     }
 
-    public void addAddKong(Tile tile) {
+    public void addAddKong() {
         for (Group group : this.pung) {
-            if (group.toList().get(0) == tile) {
+            if (this.newTile.equals(group.toList().get(0))) {
                 this.pung.remove(group);
                 break;
             }
         }
-        List<Tile> kong = this.generateNewKong(tile);
+        List<Tile> kong = this.generateNewKong(this.newTile);
         this.kong.add(new Group(kong, GroupEnum.ADD_KONG, 0));
         this.newTile = null;
         this.sort();

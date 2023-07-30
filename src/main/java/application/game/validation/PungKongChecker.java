@@ -36,7 +36,7 @@ public class PungKongChecker {
     public boolean canAddKong() {
         List<Group> pungs = this.player.getHand().getPung();
         for (Group pung : pungs) {
-            if (pung.toList().get(0) == newTile) {
+            if (newTile.equals(pung.toList().get(1))) {
                 return true;
             }
         }

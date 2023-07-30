@@ -113,8 +113,6 @@ public class GamePanel extends JPanel implements Runnable {
             this.gameState = this.game.getGameState();
             keyHandler.sProcessed = true;
         }
-
-        System.out.println(this.player.getHand().getPung());
         List<Player> allPlayers = this.gameState.getAllPlayers();
 //        System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getStatus() +
 //                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getStatus() +

@@ -44,14 +44,6 @@ public class Game {
         Collections.shuffle(tiles);
         log.addMessage("Tiles created and shuffled");
         this.unfairDeal(); //changeback to deal() after testing
-        this.tiles.add(0, new Tile(TileTypeEnum.B, 2)); //delete after testing
-        this.tiles.add(1, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(2, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(3, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(4, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(5, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(6, new Tile(TileTypeEnum.B, 2));
-        this.tiles.add(7, new Tile(TileTypeEnum.B, 2));
         this.leftOverRounds = this.gameTurn.getRoundsUntilPlayer();
         this.playLeftOverRounds();
         log.addMessage("AIs played their first turn");
@@ -78,8 +70,6 @@ public class Game {
 
     private void unfairDeal() {
         this.player.setHand(new HandTiles(new ArrayList<Tile>() {{
-            add(new Tile(TileTypeEnum.B, 2));
-            add(new Tile(TileTypeEnum.B, 2));
             add(new Tile(TileTypeEnum.C, 6));
             add(new Tile(TileTypeEnum.C, 2));
             add(new Tile(TileTypeEnum.C, 7));
@@ -104,9 +94,9 @@ public class Game {
             }
             player.setHand(new HandTiles(hand));
         }
-        int random = new Random().nextInt(this.players.size());
-        Player player = players.get(random);
-        player.addTile(this.getNextTile());
+        Player player = players.get(0);
+        player.addTile(new Tile(TileTypeEnum.B, 2));
+        player.getHand().addPung(new Tile(TileTypeEnum.B, 2));
         player.setPlayingStatus();
 
         log.addMessage("Tiles dealt");
@@ -135,11 +125,11 @@ public class Game {
         }
         this.turnPlayer.setPlayingStatus();
         new PlayerStatusChecker(turnPlayer, turnPlayer.getHand().getNewTile());
+        System.out.println(turnPlayer + "'s new tile is " + turnPlayer.getHand().getNewTile());
         this.action();
     }
 
     private void processPlayed() {
-        this.ongoingPung = false;
         List<Player> next3Players = this.gameTurn.peek3();
         for (Player player : next3Players) {
             new PlayerStatusChecker(player, this.turnPlayer.getTable().getLast());
@@ -205,7 +195,7 @@ public class Game {
             player.getHand().addNormalKong(this.turnPlayer.getTable().getLast());
             this.turnPlayer.getTable().removeLast();
         } else if (player.getStatus().contains(PlayerStatusEnum.ADD_KONG)) {
-            player.getHand().addAddKong(this.turnPlayer.getTable().getLast());
+            player.getHand().addAddKong();
         } else if (player.getStatus().contains(PlayerStatusEnum.HIDDEN_KONG)) {
             player.getHand().addHiddenKong();
         } else {

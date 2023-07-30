@@ -72,7 +72,6 @@ public class PlayerStatusChecker {
             this.player.setHiddenKongStatus();
             System.out.println("setted Hidden Kong status to " + this.player.getName());
         }
-        System.out.println("checking add kong");
         if (this.pungKongChecker.canAddKong()) {
             this.player.setAddKongStatus();
             System.out.println("setted Add Kong status to " + this.player.getName());
@@ -137,5 +136,7 @@ public class PlayerStatusChecker {
         }
         return handCopy.isEmpty();
     }
+
+
 
 }
