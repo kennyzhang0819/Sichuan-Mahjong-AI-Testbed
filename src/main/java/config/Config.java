@@ -43,6 +43,9 @@ public class Config {
     public static final int PLAYER_TABLE_WIDTH = 1200;
     public static final int PLAYER_TABLE_HEIGHT = 100;
 
+    //PlayerKongPung
+    public static final int PLAYER_PUNG_KONG_Y = 800;
+
     //AITable
     public static final int AI_TABLE_PADDING = 150;
     public static final int AI_TABLE_Y = 100;

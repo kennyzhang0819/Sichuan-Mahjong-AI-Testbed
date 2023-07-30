@@ -19,16 +19,22 @@ public class PungKongChecker {
     }
 
     public boolean canPung() {
+        if (this.player.isPlaying()) {
+            return false;
+        }
         int tileCount = Collections.frequency(playerHand, newTile);
-        return tileCount >= 2; // if there is a pair, can Pung
+        return tileCount >= 2;
     }
 
     public boolean canNormalKong() {
+        if (this.player.isPlaying()) {
+            return false;
+        }
         int tileCount = Collections.frequency(playerHand, newTile);
-        return tileCount >= 3; // if there is a triple, can Kong
+        return tileCount >= 3;
     }
     public boolean canAddKong() {
-        List<Group> pungs = player.getHand().getPung();
+        List<Group> pungs = this.player.getHand().getPung();
         for (Group pung : pungs) {
             if (pung.toList().get(0) == newTile) {
                 return true;
@@ -38,12 +44,16 @@ public class PungKongChecker {
     }
 
     public boolean canHiddenKong() {
+        if (this.player.isWaiting()) {
+            return false;
+        }
         for (Tile tile : this.playerHand) {
             if (Collections.frequency(playerHand, tile) == 4) {
                 return true;
             }
         }
-        return false;
+        int tileCount = Collections.frequency(playerHand, newTile);
+        return tileCount >= 3;
     }
 
 }

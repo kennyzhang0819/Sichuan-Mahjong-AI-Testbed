@@ -84,6 +84,7 @@ public class Drawer {
         g2.drawString("Press 'C' to Chi", 30, 50);
         g2.drawString("Press 'P' to Pung", 30, 70);
         g2.drawString("Press 'K' to Kong", 30, 90);
+        g2.drawString("Press 'S' to Skip", 30, 110);
     }
 
     public void drawHelperBoxes() {

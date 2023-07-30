@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (hoveredTile != null && player.getStatus().contains(PlayerStatusEnum.PLAYING) &&
+                if (hoveredTile != null && player.isPlaying() &&
                         !player.containsChouPungKong()) {
                     player.plays(hoveredTile);
                     hoveredTile = null;
@@ -86,11 +86,17 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if (keyHandler.hPressed && !keyHandler.hProcessed
                 && player.getStatus().contains(PlayerStatusEnum.HU)) {
-            System.out.println("the player wins!");
+            this.game.processHu(player);
             keyHandler.hProcessed = true;
         }
+        if (keyHandler.cPressed && !keyHandler.cProcessed
+                && player.containsChou()) {
+            this.game.processChou(player);
+            this.gameState = game.getGameState();
+            keyHandler.cProcessed = true;
+        }
         if (keyHandler.pPressed && !keyHandler.pProcessed
-                && player.getStatus().contains(PlayerStatusEnum.PUNG)) {
+                && player.containsPung()) {
             this.game.processPung(player);
             this.gameState = game.getGameState();
             keyHandler.pProcessed = true;
@@ -101,17 +107,15 @@ public class GamePanel extends JPanel implements Runnable {
             this.gameState = game.getGameState();
             keyHandler.kProcessed = true;
         }
-        if (keyHandler.sPressed
+        if (keyHandler.sPressed && !keyHandler.sProcessed
                 && player.containsChouPungKong()) {
-            this.game.processPlayerSkipped();
+            this.game.processSkipped(player);
             this.gameState = this.game.getGameState();
+            keyHandler.sProcessed = true;
         }
 
+        System.out.println(this.player.getHand().getPung());
         List<Player> allPlayers = this.gameState.getAllPlayers();
-//                System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getHand().toList().size()  +
-//                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getHand().toList().size()  +
-//                " | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getHand().toList().size()  +
-//                " | " + allPlayers.get(3).getName() + " : " + allPlayers.get(3).getHand().toList().size() );
 //        System.out.println(allPlayers.get(0).getName() + " : " + allPlayers.get(0).getStatus() +
 //                " | " + allPlayers.get(1).getName() + " : " + allPlayers.get(1).getStatus() +
 //                " | " + allPlayers.get(2).getName() + " : " + allPlayers.get(2).getStatus() +

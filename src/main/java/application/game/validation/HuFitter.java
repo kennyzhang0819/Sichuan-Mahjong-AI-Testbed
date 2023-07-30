@@ -53,9 +53,10 @@ public class HuFitter {
     }
 
     public Set<List<Group>> fitStandardHu() {
+        int groupsNeeded = 4 - this.pung.size() - this.kong.size();
         Set<List<Group>> result = new HashSet<>();
         for (Group pair : this.pair) {
-            Set<Set<Group>> combinations = Utils.getCombinations(this.allGroupsOf3, 4);
+            Set<Set<Group>> combinations = Utils.getCombinations(this.allGroupsOf3, groupsNeeded);
             for (Set<Group> groupOf3 : combinations) {
                 List<Group> temp = new ArrayList<>();
                 temp.add(pair);

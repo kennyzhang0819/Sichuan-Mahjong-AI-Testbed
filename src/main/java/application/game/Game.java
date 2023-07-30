@@ -13,7 +13,6 @@ import java.util.*;
 public class Game {
     private boolean ended;
     private final List<Tile> tiles;
-    private final List<Tile> allTiles;
     private final List<Player> players;
     private final Player player;
     private Player turnPlayer;
@@ -42,10 +41,17 @@ public class Game {
                 }
             }
         }
-        this.allTiles = new ArrayList<>(this.tiles);
         Collections.shuffle(tiles);
         log.addMessage("Tiles created and shuffled");
         this.unfairDeal(); //changeback to deal() after testing
+        this.tiles.add(0, new Tile(TileTypeEnum.B, 2)); //delete after testing
+        this.tiles.add(1, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(2, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(3, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(4, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(5, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(6, new Tile(TileTypeEnum.B, 2));
+        this.tiles.add(7, new Tile(TileTypeEnum.B, 2));
         this.leftOverRounds = this.gameTurn.getRoundsUntilPlayer();
         this.playLeftOverRounds();
         log.addMessage("AIs played their first turn");
@@ -72,19 +78,19 @@ public class Game {
 
     private void unfairDeal() {
         this.player.setHand(new HandTiles(new ArrayList<Tile>() {{
+            add(new Tile(TileTypeEnum.B, 2));
+            add(new Tile(TileTypeEnum.B, 2));
+            add(new Tile(TileTypeEnum.C, 6));
             add(new Tile(TileTypeEnum.C, 2));
-            add(new Tile(TileTypeEnum.C, 2));
-            add(new Tile(TileTypeEnum.C, 2));
-            add(new Tile(TileTypeEnum.C, 2));
+            add(new Tile(TileTypeEnum.C, 7));
             add(new Tile(TileTypeEnum.C, 7));
             add(new Tile(TileTypeEnum.C, 8));
             add(new Tile(TileTypeEnum.C, 8));
-            add(new Tile(TileTypeEnum.C, 8));
+            add(new Tile(TileTypeEnum.C, 1));
+            add(new Tile(TileTypeEnum.C, 1));
             add(new Tile(TileTypeEnum.C, 1));
             add(new Tile(TileTypeEnum.C, 3));
-            add(new Tile(TileTypeEnum.C, 6));
-            add(new Tile(TileTypeEnum.D, 6));
-            add(new Tile(TileTypeEnum.D, 6));
+            add(new Tile(TileTypeEnum.C, 4));
 
         }}));
         for (Player player : players) {
@@ -98,12 +104,14 @@ public class Game {
             }
             player.setHand(new HandTiles(hand));
         }
-        this.player.addTile(this.getNextTile());
-        this.player.setPlayingStatus();
+        int random = new Random().nextInt(this.players.size());
+        Player player = players.get(random);
+        player.addTile(this.getNextTile());
+        player.setPlayingStatus();
 
         log.addMessage("Tiles dealt");
         log.addMessage(player.getName() + " starts the game");
-        this.gameTurn = new GameTurn(players, this.player); //changeback to "player" after testing
+        this.gameTurn = new GameTurn(players, player);
     }
 
     private Tile getNextTile() {
@@ -117,6 +125,7 @@ public class Game {
 
     private void next() {
         this.turnPlayer = gameTurn.next();
+
         if (turnPlayer.getStatus().contains(PlayerStatusEnum.HU)) {
             this.ended = true;
         }
@@ -124,14 +133,9 @@ public class Game {
         if (gameTurn.getRound() != 1) {
             turnPlayer.addTile(this.getNextTile());
         }
+        this.turnPlayer.setPlayingStatus();
         new PlayerStatusChecker(turnPlayer, turnPlayer.getHand().getNewTile());
-        if (turnPlayer == this.player) {
-            log.addMessage("directing to " + turnPlayer.getName() + " for action");
-        } else {
-            turnPlayer.setPlayingStatus();
-            turnPlayer.action();
-            this.processPlayed();
-        }
+        this.action();
     }
 
     private void processPlayed() {
@@ -142,9 +146,9 @@ public class Game {
         }
         log.addMessage(this.turnPlayer.getName() + " played");
         this.turnPlayer.setWaitingStatus();
-        if (!this.player.containsChouPungKong()) { //add logic so that ais can also pung
-            this.gameTurn.getPlayerAfter(this.turnPlayer).setPlayingStatus();
-        }
+//        if (!this.player.containsChouPungKong()) { //add logic so that ais can also pung
+//            this.gameTurn.getPlayerAfter(this.turnPlayer).setPlayingStatus();
+//        }
     }
 
     private void playLeftOverRounds() {
@@ -153,11 +157,18 @@ public class Game {
             leftOverRounds--;
             if (this.player.containsChouPungKong()) {
                 log.addMessage("press c to chow, p to pung, k to kong, or s to skip");
-                this.getGameState();
                 return;
             }
         }
-        this.getGameState();
+    }
+
+    private void action() {
+        if (turnPlayer == this.player) {
+            log.addMessage("directing to " + turnPlayer.getName() + " for action");
+        } else {
+            turnPlayer.action();
+            this.processPlayed();
+        }
     }
 
 
@@ -168,15 +179,25 @@ public class Game {
         this.playLeftOverRounds();
     }
 
+    public void processHu(Player player) {
+        log.addMessage(player.getName() + " wins");
+    }
+
+    public void processChou(Player player) {
+        player.setHuStatus();
+        this.turnPlayer.getTable().removeLast();
+        log.addMessage(player.getName() + " chou");
+        this.processHu(player);
+    }
+
     public void processPung(Player player) {
         player.getHand().addPung(this.turnPlayer.getTable().getLast());
         this.turnPlayer.getTable().removeLast();
         this.gameTurn = new GameTurn(this.players, player);
         this.turnPlayer = gameTurn.next();
-        player.setPlayingStatus();
-        player.clearStatus();
-        this.ongoingPung = true;
-        log.addMessage(player.getName() + " pung, now " + player.getName() + " will play 1 tile");
+        this.turnPlayer.setPlayingStatus();
+        this.turnPlayer.clearStatus();
+        log.addMessage(this.turnPlayer.getName() + " pung, now play 1 tile");
     }
 
     public void processKong(Player player) {
@@ -191,16 +212,25 @@ public class Game {
             throw new RuntimeException("Invalid kong");
         }
         player.addTile(this.getNextTile());
-        this.gameTurn = new GameTurn(this.players, this.player);
-        this.turnPlayer = gameTurn.next();
         player.setPlayingStatus();
-        player.clearStatus();
-        this.ongoingPung = true;
-        log.addMessage(player.getName() + " kong, now " + player.getName() + " will play 1 tile");
+        new PlayerStatusChecker(player, player.getHand().getNewTile());
+        if (this.player.containsChouPungKong()) {
+            log.addMessage("press k to kong or s to skip");
+            return;
+        }
+        this.gameTurn = new GameTurn(this.players, player);
+        this.turnPlayer = gameTurn.next();
+        this.turnPlayer.setPlayingStatus();
+        this.turnPlayer.clearStatus();
+        log.addMessage(this.turnPlayer.getName() + " kong, now play 1 tile");
+
+        this.action();
     }
 
-    public void processPlayerSkipped() {
+    public void processSkipped(Player player) {
+        player.clearStatus();
         gameTurn.getPlayerAfter(turnPlayer).setPlayingStatus();
+        log.addMessage(player.getName() + " skipped, now play 1 tile");
         this.playLeftOverRounds();
     }
 
@@ -226,7 +256,7 @@ public class Game {
         Tile newTile = playerHand.getNewTile();
 
         return new GameState(this.turnPlayer, this.players, gameTurn.getRound(), playerHandList,
-                kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table, this.ongoingPung);
+                kong, pung, newTile, playerTable, ai1Table, ai2Table, ai3Table);
     }
 
 

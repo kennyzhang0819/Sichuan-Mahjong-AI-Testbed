@@ -57,6 +57,14 @@ public class Player {
         return this.status.contains(PlayerStatusEnum.WAITING);
     }
 
+    public boolean containsChou() {
+        return this.status.contains(PlayerStatusEnum.CHOW);
+    }
+
+    public boolean containsPung() {
+        return this.status.contains(PlayerStatusEnum.PUNG);
+    }
+
     public boolean containsKong() {
         return this.status.contains(PlayerStatusEnum.NORMAL_KONG)
                 || this.status.contains(PlayerStatusEnum.HIDDEN_KONG)
@@ -157,4 +165,6 @@ public class Player {
                 ", hand=" + hand +
                 '}';
     }
+
+
 }

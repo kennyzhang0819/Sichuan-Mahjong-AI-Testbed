@@ -90,6 +90,13 @@ public class HandTiles extends Tiles {
                 this.tiles.removeAll(Collections.singletonList(tile));
                 this.sort();
                 break;
+            } else if (Collections.frequency(this.tiles, tile) == 3 && tile.equals(this.newTile)) {
+                List<Tile> kong = this.generateNewKong(tile);
+                this.kong.add(new Group(kong, GroupEnum.HIDDEN_KONG, 0));
+                this.tiles.removeAll(Collections.singletonList(tile));
+                this.newTile = null;
+                this.sort();
+                break;
             }
         }
     }
@@ -139,27 +146,31 @@ public class HandTiles extends Tiles {
             pungsAndKongs.addAll(this.pung);
         if (this.kong != null)
             pungsAndKongs.addAll(this.kong);
-        if (pungsAndKongs.size() > 0) {
-            int totalGroups = pungsAndKongs.size(); // Number of groups
 
-            for (int i = totalGroups - 1; i >= 0; i--) {
+        if (pungsAndKongs.size() > 0) {
+            int totalTilesSoFar = 0;
+
+            for (int i = 0; i < pungsAndKongs.size(); i++) {
                 Group group = pungsAndKongs.get(i);
-                int totalTilesInGroup = group.toList().size(); // Number of tiles in group
+                int totalTilesInGroup = group.toList().size();
+
 
                 // Calculate the starting x-position of the group
-                int groupX = Config.PLAYER_TABLE_X + Config.PLAYER_TABLE_WIDTH
-                        - (Config.TABLE_TILE_WIDTH * totalTilesInGroup + Config.TABLE_TILE_PADDING) * (totalGroups - i);
+                int groupX = Config.PLAYER_TABLE_X
+                        + (Config.TABLE_TILE_WIDTH * totalTilesSoFar + Config.TABLE_TILE_PADDING * i);
 
                 for (int j = 0; j < totalTilesInGroup; j++) {
                     Tile tile = group.toList().get(j);
-
                     // Calculate the x-position of the tile within the group
                     tile.x = groupX + Config.TABLE_TILE_WIDTH * j;
-                    tile.y = Config.PLAYER_TABLE_Y;
+                    tile.y = Config.PLAYER_PUNG_KONG_Y;
                     tile.width = Config.TABLE_TILE_WIDTH;
                     tile.height = Config.TABLE_TILE_HEIGHT;
                 }
+                totalTilesSoFar += totalTilesInGroup;
+
             }
         }
+
     }
 }

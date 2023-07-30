@@ -31,8 +31,8 @@ public class PlayerStatusChecker {
         List<Tile> tiles = player.getHand().toList();
         assert newTile != null;
         tiles.add(newTile);
-        player.getHand().getKong().forEach(kong -> tiles.addAll(kong.toList()));
-        player.getHand().getPung().forEach(pung -> tiles.addAll(pung.toList()));
+        this.pung.addAll(player.getHand().getPung());
+        this.kong.addAll(player.getHand().getKong());
         this.tiles = new ArrayList<>(tiles);
         this.setTiles();
     }
@@ -52,11 +52,13 @@ public class PlayerStatusChecker {
         this.player.clearStatus();
         if (this.checkHu()) {
             if (this.player.isPlaying()) {
+                System.out.println(this.player.getHand());
                 this.player.setHuStatus();
                 System.out.println("setted hu status to " + this.player.getName());
+            } else {
+                this.player.setChowStatus();
+                System.out.println("setted chow status to " + this.player.getName());
             }
-            this.player.setChowStatus();
-            System.out.println("setted chow status to " + this.player.getName());
         }
         if (this.pungKongChecker.canPung()) {
             this.player.setPungStatus();
@@ -70,6 +72,7 @@ public class PlayerStatusChecker {
             this.player.setHiddenKongStatus();
             System.out.println("setted Hidden Kong status to " + this.player.getName());
         }
+        System.out.println("checking add kong");
         if (this.pungKongChecker.canAddKong()) {
             this.player.setAddKongStatus();
             System.out.println("setted Add Kong status to " + this.player.getName());
