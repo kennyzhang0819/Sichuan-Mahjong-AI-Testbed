@@ -1,6 +1,7 @@
 import aimodel.ProbabilityAI;
 import model.basic.Tile;
 import model.basic.TileTypeEnum;
+import model.tiles.HandTiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class TestAI {
         add(new Tile(TileTypeEnum.C, 5));
     }};
     ProbabilityAI ai = new ProbabilityAI();
-    ai.setHand(hand);
+    ai.setHand(new HandTiles(hand));
         System.out.println(ai.getTileToPlay());
 }
 }

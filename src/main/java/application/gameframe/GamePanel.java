@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final Player player;
     private Tile hoveredTile = null;
     private final TileImageLoader imageLoader = new TileImageLoader();
+    private List<Tile> interactableTiles;
 
     public GamePanel() {
         this.game = new Game();
@@ -55,19 +56,10 @@ public class GamePanel extends JPanel implements Runnable {
             @Override
             public void mouseMoved(MouseEvent e) {
                 List<Tile> hand = new ArrayList<Tile>() {{
-                    this.addAll(gameState.getPlayerHand());
-                    if (gameState.getPlayerNewTile() != null) {
-                        this.add(gameState.getPlayerNewTile());
-                    }
+                    this.addAll(interactableTiles);
                 }};
                 Tile newHoveredTile = getTileAt(e.getX(), e.getY(), hand);
                 if (newHoveredTile != hoveredTile) {
-                    if (hoveredTile != null) {
-                        moveTileDown(hoveredTile);
-                    }
-                    if (newHoveredTile != null) {
-                        moveTileUp(newHoveredTile);
-                    }
                     hoveredTile = newHoveredTile;
                 }
             }
@@ -123,11 +115,16 @@ public class GamePanel extends JPanel implements Runnable {
         Drawer drawer = new Drawer(g2, getWidth(), getHeight(), imageLoader);
         drawer.drawBackground();
         drawer.drawLogs(this.game.getLog().getLastXMessages(39));
-        drawer.drawInstructions();
         drawer.drawHelperBoxes();
 
-        for (Tile tile : gameState.getTilesToDraw()) {
-            drawer.drawTile(tile);
+
+        for (Player p : game.getPlayers()) {
+            drawer.drawTable(p.getTable().toList(), p.getPosition());
+            drawer.drawPungKong(p.getHand().getPungKong(), p.getPosition());
+        }
+        interactableTiles = drawer.drawPlayerHand(player.getHand().toList(), player.getHand().getNewTile());
+        if (hoveredTile != null) {
+            drawer.drawTile(hoveredTile, Color.LIGHT_GRAY);
         }
         g2.dispose();
     }

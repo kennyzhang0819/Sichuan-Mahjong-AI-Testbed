@@ -10,13 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 public class TileUtils {
 
-    public static void resetEntity(Tile tile) {
-        tile.x = 1;
-        tile.y = 1;
-        tile.width = 30;
-        tile.height = 30;
-    }
-
     public static Tile getTileAt(int x, int y, List<Tile> tiles) {
         if (Config.PLAYER_HAND_X <= x && x <= Config.PLAYER_HAND_X + Config.PLAYER_HAND_WIDTH
                 && Config.PLAYER_HAND_Y <= y && y <= Config.PLAYER_HAND_Y + Config.PLAYER_HAND_HEIGHT) {

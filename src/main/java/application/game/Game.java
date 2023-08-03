@@ -24,10 +24,10 @@ public class Game {
         this.log = new Log();
         this.tiles = new ArrayList<>();
         players = new ArrayList<Player>() {{
-            add(new Player("Player", new ArrayList<>()));
-            add(new AI1("AI1", new ArrayList<>()));
-            add(new AI2("AI2", new ArrayList<>()));
-            add(new AI3("AI3", new ArrayList<>()));
+            add(new Player("player", new ArrayList<>(), 0));
+            add(new AI1("ai1", new ArrayList<>(), 1));
+            add(new AI2("ai2", new ArrayList<>(), 2));
+            add(new AI3("ai3", new ArrayList<>(), 3));
         }};
         this.player = players.get(0);
         TileTypeEnum[] categories = {TileTypeEnum.B,

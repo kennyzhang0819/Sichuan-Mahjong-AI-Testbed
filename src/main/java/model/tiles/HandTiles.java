@@ -118,6 +118,13 @@ public class HandTiles extends Tiles {
         return pung;
     }
 
+    public List<Group> getPungKong() {
+        List<Group> pungKong = new ArrayList<>();
+        pungKong.addAll(this.pung);
+        pungKong.addAll(this.kong);
+        return pungKong;
+    }
+
     public Tile getNewTile() {
         return newTile;
     }
@@ -126,45 +133,20 @@ public class HandTiles extends Tiles {
     public void updatePosition() {
         for (int i = 0; i < this.tiles.size(); i++) {
             Tile tile = this.tiles.get(i);
-            tile.x = Config.PLAYER_HAND_LEFT_INDENT + Config.PLAYER_HAND_TILE_PADDING * i + Config.TILE_WIDTH * i;
+            tile.x = Config.PLAYER_HAND_X + Config.PLAYER_HAND_TILE_PADDING * i + Config.TILE_WIDTH * i;
             tile.y = Config.PLAYER_HAND_TOP_INDENT;
             tile.width = Config.TILE_WIDTH;
             tile.height = Config.TILE_HEIGHT;
         }
 
         if (this.newTile != null) {
-            this.newTile.x = Config.PLAYER_HAND_LEFT_INDENT
+            this.newTile.x = Config.PLAYER_HAND_X
                     + Config.PLAYER_HAND_TILE_PADDING
                     + Config.TILE_WIDTH
                     + Config.FOURTEENTH_TILE_INDENT;
             this.newTile.y = Config.PLAYER_HAND_TOP_INDENT;
             this.newTile.width = Config.TILE_WIDTH;
             this.newTile.height = Config.TILE_HEIGHT;
-        }
-
-        List<Group> pungsAndKongs = new ArrayList<>();
-        if (this.pung != null)
-            pungsAndKongs.addAll(this.pung);
-        if (this.kong != null)
-            pungsAndKongs.addAll(this.kong);
-
-        if (pungsAndKongs.size() > 0) {
-            int totalTilesSoFar = 0;
-            for (int i = 0; i < pungsAndKongs.size(); i++) {
-                Group group = pungsAndKongs.get(i);
-                int totalTilesInGroup = group.toList().size();
-                int groupX = Config.PLAYER_TABLE_X
-                        + (Config.TABLE_TILE_WIDTH * totalTilesSoFar + Config.TABLE_TILE_PADDING * i);
-
-                for (int j = 0; j < totalTilesInGroup; j++) {
-                    Tile tile = group.toList().get(j);
-                    tile.x = groupX + Config.TABLE_TILE_WIDTH * j;
-                    tile.y = Config.PLAYER_PUNG_KONG_Y;
-                    tile.width = Config.TABLE_TILE_WIDTH;
-                    tile.height = Config.TABLE_TILE_HEIGHT;
-                }
-                totalTilesSoFar += totalTilesInGroup;
-            }
         }
     }
 }

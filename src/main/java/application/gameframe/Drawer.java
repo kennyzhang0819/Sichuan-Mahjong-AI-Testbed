@@ -3,8 +3,12 @@ package application.gameframe;
 import application.config.Config;
 import model.basic.Entity;
 import model.basic.Tile;
+import model.tiles.Group;
+import model.tiles.GroupEnum;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Drawer {
@@ -66,11 +70,11 @@ public class Drawer {
     public void drawInstructions() {
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.PLAIN, 18));
-        g2.drawString("Press 'H' to Hu", 30, 30);
-        g2.drawString("Press 'C' to Chi", 30, 50);
-        g2.drawString("Press 'P' to Pung", 30, 70);
-        g2.drawString("Press 'K' to Kong", 30, 90);
-        g2.drawString("Press 'S' to Skip", 30, 110);
+        g2.drawString("Press 'H' to Hu", 30, 430);
+        g2.drawString("Press 'C' to Chi", 30, 450);
+        g2.drawString("Press 'P' to Pung", 30, 470);
+        g2.drawString("Press 'K' to Kong", 30, 490);
+        g2.drawString("Press 'S' to Skip", 30, 510);
     }
 
     public void drawHelperBoxes() {
@@ -86,7 +90,7 @@ public class Drawer {
         this.drawRect(ai3Table);
     }
 
-    public void drawTile(Tile tile) {
+    public void drawTile(Tile tile, Color color) {
         Image image = null;
         if (tile.width == Config.TILE_WIDTH) {
             image = imageLoader.getImage(tile);
@@ -94,9 +98,97 @@ public class Drawer {
             image = imageLoader.getTableImage(tile);
         }
         assert image != null;
-        g2.setColor(Color.WHITE);
+        g2.setColor(color);
         g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
         g2.drawImage(image, (int) tile.x, (int) tile.y, null);
     }
 
+    public void drawTable(List<Tile> tiles, int playerPosition) {
+        if (playerPosition == 0) {
+            for (int i = 0; i < tiles.size(); i++) {
+                Tile tile = tiles.get(i);
+                tile.x = Config.PLAYER_TABLE_X + Config.TABLE_TILE_PADDING * i + Config.TABLE_TILE_WIDTH * i;
+                tile.y = Config.PLAYER_TABLE_Y;
+                tile.width = Config.TABLE_TILE_WIDTH;
+                tile.height = Config.TABLE_TILE_HEIGHT;
+                this.drawTile(tile, Color.WHITE);
+            }
+        } else {
+            final List<Integer> aiTableX = Arrays.asList(Config.AI1_TABLE_X, Config.AI2_TABLE_X, Config.AI3_TABLE_X);
+            int currentLine = 0;
+            int currentTile = 0;
+            for (Tile tile : tiles) {
+                tile.x = aiTableX.get(playerPosition - 1) + Config.TABLE_TILE_PADDING * currentTile + Config.TABLE_TILE_WIDTH * currentTile;
+                tile.y = Config.AI_TABLE_Y + Config.TABLE_TILE_HEIGHT * currentLine + Config.TABLE_TILE_PADDING * currentLine;
+                tile.width = Config.TABLE_TILE_WIDTH;
+                tile.height = Config.TABLE_TILE_HEIGHT;
+                this.drawTile(tile, Color.WHITE);
+                currentTile++;
+                if (currentTile == Config.AI_TABLE_NUM_TILES_PER_LINE) {
+                    currentLine++;
+                    currentTile = 0;
+                }
+            }
+        }
+    }
+
+    public void drawPungKong(List<Group> pungKong, int playerPosition) {
+        if (pungKong.size() <= 0) {
+            return;
+        }
+        final List<Integer> pungKongX = Arrays.asList(
+                Config.PLAYER_TABLE_X + Config.PLAYER_TABLE_WIDTH,
+                Config.AI1_TABLE_X + Config.AI_TABLE_WIDTH,
+                Config.AI2_TABLE_X + Config.AI_TABLE_WIDTH,
+                Config.AI3_TABLE_X + Config.AI_TABLE_WIDTH);
+
+        final List<Integer> pungKongY = Arrays.asList(
+                Config.PLAYER_TABLE_Y, Config.AI1_TABLE_Y, Config.AI2_TABLE_Y, Config.AI3_TABLE_Y);
+        Color color;
+        for (int i = 0; i < pungKong.size(); i++) {
+            Group group = pungKong.get(i);
+            if (group.getCategory() == GroupEnum.PUNG) {
+                color = Color.YELLOW;
+            } else {
+                color = Color.ORANGE;
+            }
+            int totalTilesInGroup = group.toList().size();
+            int groupX = pungKongX.get(playerPosition);
+            for (int j = 0; j < totalTilesInGroup; j++) {
+                Tile tile = group.toList().get(j);
+                tile.x = groupX + Config.TABLE_TILE_WIDTH * j;
+                tile.y = pungKongY.get(playerPosition) + Config.TABLE_TILE_HEIGHT * i + Config.TABLE_TILE_PADDING * i;
+                tile.width = Config.TABLE_TILE_WIDTH;
+                tile.height = Config.TABLE_TILE_HEIGHT;
+                this.drawTile(tile, color);
+            }
+        }
+    }
+    public List<Tile> drawPlayerHand(List<Tile> hand, Tile newTile) {
+        for (int i = 0; i < hand.size(); i++) {
+            Tile tile = hand.get(i);
+            tile.x = Config.PLAYER_HAND_X + Config.PLAYER_HAND_TILE_PADDING * i + Config.TILE_WIDTH * i;
+            tile.y = Config.PLAYER_HAND_TOP_INDENT;
+            tile.width = Config.TILE_WIDTH;
+            tile.height = Config.TILE_HEIGHT;
+            this.drawTile(tile, Color.WHITE);
+        }
+
+        if (newTile != null) {
+            newTile.x = Config.PLAYER_HAND_X
+                    + Config.PLAYER_HAND_TILE_PADDING
+                    + Config.TILE_WIDTH
+                    + Config.FOURTEENTH_TILE_INDENT;
+            newTile.y = Config.PLAYER_HAND_TOP_INDENT;
+            newTile.width = Config.TILE_WIDTH;
+            newTile.height = Config.TILE_HEIGHT;
+            this.drawTile(newTile, Color.WHITE);
+        }
+        return new ArrayList<Tile>() {{
+            addAll(hand);
+            if (newTile != null) {
+                add(newTile);
+            }
+        }};
+    }
 }

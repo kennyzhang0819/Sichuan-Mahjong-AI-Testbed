@@ -1,23 +1,26 @@
 package model.players;
 
-import model.tiles.HandTiles;
-import model.tiles.PlayerTableTiles;
 import model.basic.Tile;
+import model.tiles.HandTiles;
 import model.tiles.Tiles;
-import utils.TileUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class Player {
     protected Set<PlayerStatusEnum> status;
     protected final String name;
+    protected final int position;
     protected HandTiles hand;
-    private final PlayerTableTiles table;
+    protected final Tiles table;
 
-    public Player(String name, List<Tile> hand) {
+    public Player(String name, List<Tile> hand, int position) {
         this.name = name;
+        this.position = position;
         this.hand = new HandTiles(hand);
-        this.table = new PlayerTableTiles();
+        this.table = new Tiles();
         this.status = new HashSet<PlayerStatusEnum>() {{
             add(PlayerStatusEnum.WAITING);
         }};
@@ -25,7 +28,6 @@ public class Player {
 
     public void plays(Tile tile) {
         this.hand.remove(tile);
-        TileUtils.resetEntity(tile);
         this.table.add(tile);
     }
 
@@ -146,6 +148,10 @@ public class Player {
 
     public PlayerActionEnum otherAction(Tile tile) {
         return null;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     @Override

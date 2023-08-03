@@ -38,74 +38,25 @@ public class GameState {
         this.ai2Table = ai2Table;
         this.ai3Table = ai3Table;
 
-        this.tilesToDraw = Stream.of(playerHand, playerKong, playerPung, playerTable, ai1Table, ai2Table, ai3Table).flatMap(List::stream).collect(Collectors.toList());
+        this.tilesToDraw = Stream.of(playerHand).flatMap(List::stream).collect(Collectors.toList());
         if (this.playerNewTile != null) {
             this.tilesToDraw.add(this.playerNewTile);
         }
     }
 
-    public Player getTurnPlayer() {
-        return turnPlayer;
-    }
-
-    public List<Player> getAllPlayers() {
-        return allPlayers;
-    }
-
-    public int getRound() {
-        return round;
-    }
-
     public List<Tile> getPlayerHand() {
-        return playerHand;
-    }
-
-    public List<Tile> getPlayerKong() {
-        return playerKong;
-    }
-
-    public List<Tile> getPlayerPung() {
-        return playerPung;
+        List<Tile> handWithNewTile = new ArrayList<>(playerHand);
+        if (playerNewTile != null) {
+            handWithNewTile.add(playerNewTile);
+        }
+        return handWithNewTile;
     }
 
     public Tile getPlayerNewTile() {
         return playerNewTile;
     }
 
-    public List<Tile> getPlayerTable() {
-        return playerTable;
-    }
-
-    public List<Tile> getAi1Table() {
-        return ai1Table;
-    }
-
-    public List<Tile> getAi2Table() {
-        return ai2Table;
-    }
-
-    public List<Tile> getAi3Table() {
-        return ai3Table;
-    }
-
     public List<Tile> getTilesToDraw() {
         return tilesToDraw;
-    }
-
-    @Override
-    public String toString() {
-        return "GameState{" +
-                "turnPlayer=" + turnPlayer +
-                ", round=" + round +
-                ", playerHand=" + playerHand +
-                ", playerKong=" + playerKong +
-                ", playerPung=" + playerPung +
-                ", playerNewTile=" + playerNewTile +
-                ", playerTable=" + playerTable +
-                ", ai1Table=" + ai1Table +
-                ", ai2Table=" + ai2Table +
-                ", ai3Table=" + ai3Table +
-                ", tilesToDraw=" + tilesToDraw +
-                '}';
     }
 }
