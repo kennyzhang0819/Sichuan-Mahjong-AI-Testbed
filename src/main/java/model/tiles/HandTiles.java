@@ -1,6 +1,6 @@
 package model.tiles;
 
-import config.Config;
+import application.config.Config;
 import model.basic.Tile;
 
 import java.util.*;
@@ -100,6 +100,7 @@ public class HandTiles extends Tiles {
             }
         }
     }
+
     private List<Tile> generateNewKong(Tile tile) {
         return new ArrayList<Tile>() {{
             add(new Tile(tile.getType(), tile.getNumber()));
@@ -123,8 +124,9 @@ public class HandTiles extends Tiles {
 
     @Override
     public void updatePosition() {
-        for (Tile tile : this.tiles) {
-            tile.x = Config.PLAYER_HAND_LEFT_INDENT + Config.PLAYER_HAND_TILE_PADDING * tile.getIndex() + Config.TILE_WIDTH * tile.getIndex();
+        for (int i = 0; i < this.tiles.size(); i++) {
+            Tile tile = this.tiles.get(i);
+            tile.x = Config.PLAYER_HAND_LEFT_INDENT + Config.PLAYER_HAND_TILE_PADDING * i + Config.TILE_WIDTH * i;
             tile.y = Config.PLAYER_HAND_TOP_INDENT;
             tile.width = Config.TILE_WIDTH;
             tile.height = Config.TILE_HEIGHT;
@@ -140,7 +142,6 @@ public class HandTiles extends Tiles {
             this.newTile.height = Config.TILE_HEIGHT;
         }
 
-
         List<Group> pungsAndKongs = new ArrayList<>();
         if (this.pung != null)
             pungsAndKongs.addAll(this.pung);
@@ -149,28 +150,21 @@ public class HandTiles extends Tiles {
 
         if (pungsAndKongs.size() > 0) {
             int totalTilesSoFar = 0;
-
             for (int i = 0; i < pungsAndKongs.size(); i++) {
                 Group group = pungsAndKongs.get(i);
                 int totalTilesInGroup = group.toList().size();
-
-
-                // Calculate the starting x-position of the group
                 int groupX = Config.PLAYER_TABLE_X
                         + (Config.TABLE_TILE_WIDTH * totalTilesSoFar + Config.TABLE_TILE_PADDING * i);
 
                 for (int j = 0; j < totalTilesInGroup; j++) {
                     Tile tile = group.toList().get(j);
-                    // Calculate the x-position of the tile within the group
                     tile.x = groupX + Config.TABLE_TILE_WIDTH * j;
                     tile.y = Config.PLAYER_PUNG_KONG_Y;
                     tile.width = Config.TABLE_TILE_WIDTH;
                     tile.height = Config.TABLE_TILE_HEIGHT;
                 }
                 totalTilesSoFar += totalTilesInGroup;
-
             }
         }
-
     }
 }

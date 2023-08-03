@@ -4,7 +4,7 @@ import model.basic.Tile;
 
 import java.util.*;
 
-public class Tiles{
+public class Tiles {
 
     protected final List<Tile> tiles;
 
@@ -20,9 +20,8 @@ public class Tiles{
 
     public void add(Tile tile) {
         this.tiles.add(tile);
-        this.sort();
+        this.updatePosition();
     }
-
 
     public void remove(Tile tile) {
         for (Tile t : this.tiles) {
@@ -42,14 +41,7 @@ public class Tiles{
                 return tile1.getType().compareTo(tile2.getType());
             }
         });
-        this.updateIndex();
         this.updatePosition();
-    }
-
-    protected void updateIndex() {
-        for (int i = 0; i < this.tiles.size(); i++) {
-            this.tiles.get(i).setIndex(i);
-        }
     }
 
     public void updatePosition() {

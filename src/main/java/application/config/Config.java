@@ -1,4 +1,4 @@
-package config;
+package application.config;
 
 public class Config {
     //Settings
@@ -49,7 +49,7 @@ public class Config {
     //AITable
     public static final int AI_TABLE_PADDING = 150;
     public static final int AI_TABLE_Y = 100;
-    public static final int AI_TABLE_WIDTH = 300;
+    public static final int AI_TABLE_WIDTH = 250;
     public static final int AI_TABLE_HEIGHT = 300;
     public static final int AI_TABLE_NUM_TILES_PER_LINE = 5;
 

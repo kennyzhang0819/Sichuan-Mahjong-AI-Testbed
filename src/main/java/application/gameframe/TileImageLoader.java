@@ -1,6 +1,6 @@
 package application.gameframe;
 
-import config.Config;
+import application.config.Config;
 import model.basic.Tile;
 import model.basic.TileTypeEnum;
 

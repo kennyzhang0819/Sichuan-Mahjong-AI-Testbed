@@ -1,6 +1,6 @@
 package application.gameframe;
 
-import config.Config;
+import application.config.Config;
 import model.basic.Entity;
 import model.basic.Tile;
 
@@ -20,20 +20,6 @@ public class Drawer {
         this.height = height;
         this.imageLoader = imageLoader;
     }
-
-    public void drawTile(Tile tile) {
-        Image image = null;
-        if (tile.width == Config.TILE_WIDTH) {
-            image = imageLoader.getImage(tile);
-        } else if (tile.width == Config.TABLE_TILE_WIDTH) {
-            image = imageLoader.getTableImage(tile);
-        }
-        assert image != null;
-        g2.setColor(Color.WHITE);
-        g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
-        g2.drawImage(image, (int) tile.x, (int) tile.y, null);
-    }
-
 
     public void drawBackground() {
         Color baseGreen = new Color(30, 100, 60);
@@ -99,4 +85,18 @@ public class Drawer {
         this.drawRect(ai2Table);
         this.drawRect(ai3Table);
     }
+
+    public void drawTile(Tile tile) {
+        Image image = null;
+        if (tile.width == Config.TILE_WIDTH) {
+            image = imageLoader.getImage(tile);
+        } else if (tile.width == Config.TABLE_TILE_WIDTH) {
+            image = imageLoader.getTableImage(tile);
+        }
+        assert image != null;
+        g2.setColor(Color.WHITE);
+        g2.fillRect((int) tile.x, (int) tile.y, tile.width, tile.height);
+        g2.drawImage(image, (int) tile.x, (int) tile.y, null);
+    }
+
 }

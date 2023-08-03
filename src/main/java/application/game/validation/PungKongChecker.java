@@ -34,6 +34,9 @@ public class PungKongChecker {
         return tileCount >= 3;
     }
     public boolean canAddKong() {
+        if (this.player.isWaiting()) {
+            return false;
+        }
         List<Group> pungs = this.player.getHand().getPung();
         for (Group pung : pungs) {
             if (newTile.equals(pung.toList().get(1))) {

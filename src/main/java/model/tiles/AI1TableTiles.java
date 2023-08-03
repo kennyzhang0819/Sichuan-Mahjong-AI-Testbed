@@ -1,15 +1,16 @@
 package model.tiles;
 
-import config.Config;
+import application.config.Config;
 import model.basic.Tile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AI1TableTiles extends Tiles {
 
     public AI1TableTiles() {
         super();
     }
-
-
 
     @Override
     public void updatePosition() {
@@ -27,12 +28,5 @@ public class AI1TableTiles extends Tiles {
                 currentTile = 0;
             }
         }
-    }
-
-    @Override
-    public void add(Tile tile) {
-        this.tiles.add(tile);
-        this.updateIndex();
-        this.updatePosition();
     }
 }

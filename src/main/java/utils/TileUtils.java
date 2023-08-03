@@ -1,6 +1,6 @@
 package utils;
 
-import config.Config;
+import application.config.Config;
 import model.basic.Tile;
 
 import java.util.List;

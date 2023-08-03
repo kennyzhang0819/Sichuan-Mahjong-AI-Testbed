@@ -57,11 +57,7 @@ public class GameState {
     }
 
     public List<Tile> getPlayerHand() {
-        List<Tile> handWithNewTile = new ArrayList<>(playerHand);
-        if (playerNewTile != null) {
-            handWithNewTile.add(playerNewTile);
-        }
-        return handWithNewTile;
+        return playerHand;
     }
 
     public List<Tile> getPlayerKong() {

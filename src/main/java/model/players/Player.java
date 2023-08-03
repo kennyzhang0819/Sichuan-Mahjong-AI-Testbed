@@ -57,7 +57,7 @@ public class Player {
         return this.status.contains(PlayerStatusEnum.WAITING);
     }
 
-    public boolean containsChou() {
+    public boolean containsChow() {
         return this.status.contains(PlayerStatusEnum.CHOW);
     }
 
@@ -140,8 +140,12 @@ public class Player {
         this.hand.add(tile);
     }
 
-    public void action() {
+    public void playAction() {
 
+    }
+
+    public PlayerActionEnum otherAction(Tile tile) {
+        return null;
     }
 
     @Override
@@ -165,6 +169,5 @@ public class Player {
                 ", hand=" + hand +
                 '}';
     }
-
 
 }
