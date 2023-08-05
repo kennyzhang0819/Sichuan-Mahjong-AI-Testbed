@@ -1,9 +1,10 @@
 package model.tiles;
 
-import application.config.Config;
 import model.basic.Tile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class HandTiles extends Tiles {
 
@@ -130,24 +131,4 @@ public class HandTiles extends Tiles {
         return newTile;
     }
 
-    @Override
-    public void updatePosition() {
-        for (int i = 0; i < this.tiles.size(); i++) {
-            Tile tile = this.tiles.get(i);
-            tile.x = Config.PLAYER_HAND_X + Config.PLAYER_HAND_TILE_PADDING * i + Config.TILE_WIDTH * i;
-            tile.y = Config.PLAYER_HAND_TOP_INDENT;
-            tile.width = Config.TILE_WIDTH;
-            tile.height = Config.TILE_HEIGHT;
-        }
-
-        if (this.newTile != null) {
-            this.newTile.x = Config.PLAYER_HAND_X
-                    + Config.PLAYER_HAND_TILE_PADDING
-                    + Config.TILE_WIDTH
-                    + Config.FOURTEENTH_TILE_INDENT;
-            this.newTile.y = Config.PLAYER_HAND_TOP_INDENT;
-            this.newTile.width = Config.TILE_WIDTH;
-            this.newTile.height = Config.TILE_HEIGHT;
-        }
-    }
 }

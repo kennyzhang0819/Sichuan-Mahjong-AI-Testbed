@@ -175,9 +175,8 @@ public class Drawer {
         }
 
         if (newTile != null) {
-            newTile.x = Config.PLAYER_HAND_X
-                    + Config.PLAYER_HAND_TILE_PADDING
-                    + Config.TILE_WIDTH
+            newTile.x = Config.PLAYER_HAND_X + Config.PLAYER_HAND_TILE_PADDING * hand.size()
+                    + Config.TILE_WIDTH * hand.size()
                     + Config.FOURTEENTH_TILE_INDENT;
             newTile.y = Config.PLAYER_HAND_TOP_INDENT;
             newTile.width = Config.TILE_WIDTH;

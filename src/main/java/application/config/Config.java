@@ -28,7 +28,7 @@ public class Config {
     public static final int PLAYER_HAND_WIDTH = 1100;
     public static final int PLAYER_HAND_HEIGHT = 200;
     public static final int PLAYER_HAND_TOP_INDENT = PLAYER_HAND_Y + 50;
-    public static final int FOURTEENTH_TILE_INDENT = 920;
+    public static final int FOURTEENTH_TILE_INDENT = 30;
     public static final int PLAYER_HAND_TILE_PADDING = 10;
 
     //Table Commons
