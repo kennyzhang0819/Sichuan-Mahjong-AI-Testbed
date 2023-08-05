@@ -16,7 +16,9 @@ This repository contains the source code for a fully implemented Sichuan Mahjong
 - **Fully Implemented Mahjong Game:** This game follows the Sichuan version rules of Mahjong as established in the 2016 Tencent Mahjong Tournament. You can learn more about the official rules [here](http://majiang.qq.com/webplat/info/news_version3/7207/25932/25933/25936/m16340/201611/523252.shtml).
 - **Supports 4 Players:** The game can accommodate up to four players.
 - **1v3 Mode:** Allows a player to compete against three AI opponents. The player can interact with their own tiles and decide what to play.
-- **Customizable AI:** The AI can be modified according to any strategy. The current implementation uses a probability-based AI that optimizes for the highest probability hand combination. However, it can be replaced or extended to consider more factors, such as the actions of other players.
+- **Customizable AI:** The AI can be modified according to any strategy. The current implementation uses a probability-based AI that optimizes for the highest probability hand combination. However, it can be replaced or extended to consider more factors, such as the actions of other players and tiles already played.
+- (Coming)**Fight To Death:** The game doesn't immediately end after one player wins. Instead, all remaining players compete until only one remains or a tie between multiple players.
+- (Coming)**Scoreboard:** Keeps track of the scores for each player.
 
 ## Getting Started
 
