@@ -70,6 +70,7 @@ public class HandTiles extends Tiles {
     }
 
     public void addAddKong() {
+        assert this.newTile != null;
         for (Group group : this.pung) {
             if (this.newTile.equals(group.toList().get(0))) {
                 this.pung.remove(group);

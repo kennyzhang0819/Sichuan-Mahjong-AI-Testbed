@@ -41,7 +41,7 @@ public class Game {
         }
         Collections.shuffle(tiles);
         log.addMessage("Tiles created and shuffled");
-        this.deal(); //changeback to deal() after testing
+        this.unfairDeal(); //changeback to deal() after testing
         this.next();
         log.addMessage("AIs played their first turn");
     }
@@ -66,22 +66,22 @@ public class Game {
     }
 
     private void unfairDeal() {
-        this.player.setHand(new HandTiles(new ArrayList<Tile>() {{
-            add(new Tile(TileTypeEnum.C, 6));
+        this.players.get(1).setHand(new HandTiles(new ArrayList<Tile>() {{
+            add(new Tile(TileTypeEnum.C, 1));
+            add(new Tile(TileTypeEnum.C, 1));
             add(new Tile(TileTypeEnum.C, 2));
-            add(new Tile(TileTypeEnum.C, 7));
-            add(new Tile(TileTypeEnum.C, 7));
-            add(new Tile(TileTypeEnum.C, 8));
-            add(new Tile(TileTypeEnum.C, 8));
-            add(new Tile(TileTypeEnum.C, 1));
-            add(new Tile(TileTypeEnum.C, 1));
-            add(new Tile(TileTypeEnum.C, 1));
-            add(new Tile(TileTypeEnum.C, 3));
+            add(new Tile(TileTypeEnum.C, 2));
+            add(new Tile(TileTypeEnum.B, 3));
+            add(new Tile(TileTypeEnum.B, 3));
             add(new Tile(TileTypeEnum.C, 4));
+            add(new Tile(TileTypeEnum.C, 5));
+            add(new Tile(TileTypeEnum.B, 6));
+            add(new Tile(TileTypeEnum.B, 6));
+            add(new Tile(TileTypeEnum.C, 7));
 
         }}));
         for (Player player : players) {
-            if (player.getName().equals("Player")) {
+            if (player.getName().equals(this.players.get(1).getName())) {
                 continue;
             }
             List<Tile> hand = new ArrayList<>();
@@ -93,7 +93,6 @@ public class Game {
         }
         Player player = players.get(0);
         player.addTile(new Tile(TileTypeEnum.B, 2));
-        player.getHand().addPung(new Tile(TileTypeEnum.B, 2));
         player.setPlayingStatus();
 
         log.addMessage("Tiles dealt");
