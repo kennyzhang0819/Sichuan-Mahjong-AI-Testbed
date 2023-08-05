@@ -21,7 +21,6 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     KeyHandler keyHandler = new KeyHandler();
     private final Game game;
-    private GameState gameState;
     private final Player player;
     private Tile hoveredTile = null;
     private final TileImageLoader imageLoader = new TileImageLoader();
@@ -29,7 +28,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         this.game = new Game();
-        this.gameState = this.game.getGameState();
         this.player = this.game.getPlayers().get(0);
 
         this.setPreferredSize(new Dimension(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT));
@@ -47,7 +45,6 @@ public class GamePanel extends JPanel implements Runnable {
                     player.plays(hoveredTile);
                     hoveredTile = null;
                     game.processPlayed();
-                    gameState = game.getGameState();
                 }
             }
         });
@@ -85,25 +82,21 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyHandler.cPressed && !keyHandler.cProcessed
                 && player.containsChow()) {
             this.game.processChou(player);
-            this.gameState = game.getGameState();
             keyHandler.cProcessed = true;
         }
         if (keyHandler.pPressed && !keyHandler.pProcessed
                 && player.containsPung()) {
             this.game.processPung(player);
-            this.gameState = game.getGameState();
             keyHandler.pProcessed = true;
         }
         if (keyHandler.kPressed && !keyHandler.kProcessed
                 && player.containsKong()) {
             this.game.processKong(player);
-            this.gameState = game.getGameState();
             keyHandler.kProcessed = true;
         }
         if (keyHandler.sPressed && !keyHandler.sProcessed
                 && player.containsChouPungKong()) {
             this.game.processSkip(player);
-            this.gameState = this.game.getGameState();
             keyHandler.sProcessed = true;
         }
     }
@@ -114,9 +107,8 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         Drawer drawer = new Drawer(g2, getWidth(), getHeight(), imageLoader);
         drawer.drawBackground();
-        drawer.drawLogs(this.game.getLog().getLastXMessages(39));
+        drawer.drawLogs(this.game.getLog().getLastXMessages(Config.LOG_ITEMS));
         drawer.drawHelperBoxes();
-
 
         for (Player p : game.getPlayers()) {
             drawer.drawTable(p.getTable().toList(), p.getPosition());
