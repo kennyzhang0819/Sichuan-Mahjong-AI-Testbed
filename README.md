@@ -1,4 +1,4 @@
-# Mahjong-Game-Framework-for-AI-Testing
+# AI Testbed Sichuan Mahjong
 
 This repository contains the source code for a fully implemented Sichuan Mahjong game in Java, complete with tile visualizations. It's designed as a testbed for AI research, offering a robust framework for AI strategy development and testing. 
 
